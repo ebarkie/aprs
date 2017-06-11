@@ -7,6 +7,17 @@ import "github.com/ebarkie/aprs"
 ## Usage
 
 ```go
+var (
+	ErrFrameBadControl  = errors.New("Frame error: Control Field not UI-frame")
+	ErrFrameBadProtocol = errors.New("Frame error: Protocol ID not no layer 3 protocol")
+	ErrFrameIncomplete  = errors.New("Frame error: incomplete")
+	ErrFrameNoLast      = errors.New("Frame error: incomplete or last path not set")
+	ErrFrameShort       = errors.New("Frame error: too short (16-bytes minimum)")
+)
+```
+Errors.
+
+```go
 var SwName = "GoAPRS"
 ```
 SwName is the default software name. It can be overridden after import.
@@ -27,9 +38,10 @@ GenPass generates a verification passcode for the given station.
 
 ```go
 type Address struct {
-	Call     string
 	SSID     int
 	Repeated bool
+
+	Call string
 }
 ```
 
