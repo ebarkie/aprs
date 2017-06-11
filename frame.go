@@ -21,10 +21,10 @@ type Frame struct {
 // Address represents an APRS callsign, SSID, and associated
 // metadata.
 type Address struct {
-	Call     string
 	SSID     int
 	Repeated bool
 	last     bool
+	Call     string
 }
 
 // Path represents the APRS digipath.
