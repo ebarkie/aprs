@@ -19,6 +19,15 @@ const (
 	protocolID = 0xf0
 )
 
+// Errors.
+var (
+	ErrFrameBadControl  = errors.New("Frame error: Control Field not UI-frame")
+	ErrFrameBadProtocol = errors.New("Frame error: Protocol ID not no layer 3 protocol")
+	ErrFrameIncomplete  = errors.New("Frame error: incomplete")
+	ErrFrameNoLast      = errors.New("Frame error: incomplete or last path not set")
+	ErrFrameShort       = errors.New("Frame error: too short (16-bytes minimum)")
+)
+
 // Bytes converts an Address into its TNC byte representation.
 func (a Address) Bytes() []byte {
 	// AX.25 addresses are always 7-bytes:
@@ -116,7 +125,7 @@ func (f Frame) Bytes() []byte {
 // FromBytes converts a TNC byte Frame into a Frame.
 func (f *Frame) FromBytes(frame []byte) (err error) {
 	if len(frame) < 16 {
-		err = errors.New("Frame error: too short (16-bytes minimum)")
+		err = ErrFrameShort
 		return
 	}
 	f.Dst.FromBytes(frame[0:7])  // Destination address
@@ -127,7 +136,7 @@ func (f *Frame) FromBytes(frame []byte) (err error) {
 	if !f.Src.last {
 		for {
 			if i+7 > len(frame) {
-				err = errors.New("Frame error: incomplete or last path not set")
+				err = ErrFrameNoLast
 				return
 			}
 
@@ -148,19 +157,19 @@ func (f *Frame) FromBytes(frame []byte) (err error) {
 	// To be valid the frame must have at least 2 more bytes for
 	// the Control Field and Protocol ID.
 	if i+2 > len(frame) {
-		err = errors.New("Frame error: incomplete")
+		err = ErrFrameIncomplete
 		return
 	}
 
 	// Control Field (always UI-frame)
 	if frame[i] != uiFrame {
-		err = errors.New("Frame error: Control Field not UI-frame")
+		err = ErrFrameBadControl
 		return
 	}
 
 	// Protocol ID (always no layer 3 protocol)
 	if frame[i+1] != protocolID {
-		err = errors.New("Frame error: Protocol ID not no layer 3 protocol")
+		err = ErrFrameBadProtocol
 		return
 	}
 
