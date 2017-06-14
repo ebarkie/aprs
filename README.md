@@ -3,7 +3,7 @@
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](http://choosealicense.com/licenses/mit/)
 [![Build Status](https://travis-ci.org/ebarkie/aprs.svg?branch=master)](https://travis-ci.org/ebarkie/aprs)
 
-Go pckage for working with APRS string and byte packets.  It can upload those
+Go package for working with APRS string and byte packets.  It can upload those
 packets via APRS-IS or transmit them via TNC KISS.
 
 It fully supports creating weather observations for [Citizen Weather Observer Program (CWOP)](http://wxqa.com).
