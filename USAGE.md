@@ -4,6 +4,9 @@
 import "github.com/ebarkie/aprs"
 ```
 
+Package aprs works with APRS string and byte packets. It can upload those
+packets via APRS-IS or transmit them via TNC KISS.
+
 ## Usage
 
 ```go
