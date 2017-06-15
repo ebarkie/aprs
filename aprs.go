@@ -7,7 +7,7 @@
 package aprs
 
 // SwName is the default software name.  It can be overridden after import.
-var SwName = "GoAPRS"
+var SwName = "Go"
 
 // SwVers is the default software version.  It can be overridden after import.
-var SwVers = "1.0"
+var SwVers = "2"
