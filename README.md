@@ -49,7 +49,7 @@ func main() {
 		Path: aprs.Path{aprs.Address{Call: "TCPIP", Repeated: true}},
 		Text: w.String(),
 	}
-	err := f.SendIS("cwop.aprs.net:14580", -1)
+	err := f.SendIS("tcp://cwop.aprs.net:14580", -1)
 	if err != nil {
 		log.Printf("Upload error: %s", err)
 	}
