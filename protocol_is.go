@@ -92,6 +92,9 @@ func (f Frame) SendHTTP(dial string, pass int) (err error) {
 
 	var req *http.Request
 	req, err = http.NewRequest("POST", dial, bytes.NewBufferString(data))
+	if err != nil {
+		return
+	}
 	req.Header.Set("Accept-Type", "text/plain")
 	req.Header.Set("Content-Type", "application/octet-stream")
 	req.Header.Set("Content-Length", strconv.Itoa(len(data)))
