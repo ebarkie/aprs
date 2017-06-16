@@ -60,10 +60,9 @@ func (a Address) Bytes() []byte {
 }
 
 // FromBytes converts a TNC byte address into an Address.
-func (a *Address) FromBytes(addr []byte) (err error) {
+func (a *Address) FromBytes(addr []byte) error {
 	if len(addr) != 7 {
-		err = fmt.Errorf("Address error: size mismatch %d != 7-bytes", len(addr))
-		return
+		return fmt.Errorf("Address error: size mismatch %d != 7-bytes", len(addr))
 	}
 
 	// Convert call from 7-bit encoding back to 8-bit
@@ -88,7 +87,7 @@ func (a *Address) FromBytes(addr []byte) (err error) {
 		a.Repeated = true
 	}
 
-	return
+	return nil
 }
 
 // Bytes converts a Frame into its TNC byte representation appropriate
@@ -123,10 +122,9 @@ func (f Frame) Bytes() []byte {
 }
 
 // FromBytes converts a TNC byte Frame into a Frame.
-func (f *Frame) FromBytes(frame []byte) (err error) {
+func (f *Frame) FromBytes(frame []byte) error {
 	if len(frame) < 16 {
-		err = ErrFrameShort
-		return
+		return ErrFrameShort
 	}
 	f.Dst.FromBytes(frame[0:7])  // Destination address
 	f.Src.FromBytes(frame[7:14]) // Source address
@@ -136,14 +134,13 @@ func (f *Frame) FromBytes(frame []byte) (err error) {
 	if !f.Src.last {
 		for {
 			if i+7 > len(frame) {
-				err = ErrFrameNoLast
-				return
+				return ErrFrameNoLast
 			}
 
 			a := Address{}
-			err = a.FromBytes(frame[i : i+7])
+			err := a.FromBytes(frame[i : i+7])
 			if err != nil {
-				return
+				return err
 			}
 			f.Path = append(f.Path, a)
 			i += 7
@@ -157,23 +154,20 @@ func (f *Frame) FromBytes(frame []byte) (err error) {
 	// To be valid the frame must have at least 2 more bytes for
 	// the Control Field and Protocol ID.
 	if i+2 > len(frame) {
-		err = ErrFrameIncomplete
-		return
+		return ErrFrameIncomplete
 	}
 
 	// Control Field (always UI-frame)
 	if frame[i] != uiFrame {
-		err = ErrFrameBadControl
-		return
+		return ErrFrameBadControl
 	}
 
 	// Protocol ID (always no layer 3 protocol)
 	if frame[i+1] != protocolID {
-		err = ErrFrameBadProtocol
-		return
+		return ErrFrameBadProtocol
 	}
 
 	f.Text = string(frame[i+2:]) // Information Field
 
-	return
+	return nil
 }
