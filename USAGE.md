@@ -21,12 +21,20 @@ var (
 Errors.
 
 ```go
-var SwName = "GoAPRS"
+var (
+	ErrNotVerified     = errors.New("Not verified but scheme requires it")
+	ErrUnhandledScheme = errors.New("Unhandled scheme")
+)
+```
+Errors.
+
+```go
+var SwName = "Go"
 ```
 SwName is the default software name. It can be overridden after import.
 
 ```go
-var SwVers = "1.0"
+var SwVers = "2"
 ```
 SwVers is the default software version. It can be overridden after import.
 
@@ -106,13 +114,31 @@ func (f *Frame) FromBytes(frame []byte) (err error)
 ```
 FromBytes converts a TNC byte Frame into a Frame.
 
+#### func (Frame) SendHTTP
+
+```go
+func (f Frame) SendHTTP(dial string, pass int) (err error)
+```
+SendHTTP sends a Frame to the specified APRS-IS host over the HTTP protocol.
+This scheme is the least efficient and requires a verified connection (real
+callsign and passcode) but is reliable and provides acknowledgement of receipt.
+
 #### func (Frame) SendIS
 
 ```go
-func (f Frame) SendIS(dial string, pass int) (err error)
+func (f Frame) SendIS(dial string, pass int) error
 ```
-SendIS sends a Frame to the specified APRS-IS host. It is most commonly used for
-CWOP.
+SendIS sends a Frame to the specified APRS-IS dial string. The dial string
+should be in the form scheme://host:port with scheme being http, tcp, or udp.
+This is most commonly used for CWOP.
+
+#### func (Frame) SendTCP
+
+```go
+func (f Frame) SendTCP(dial string, pass int) (err error)
+```
+SendTCP sends a Frame to the specified APRS-IS host over the TCP protocol. This
+scheme is the oldest, most compatible, and allows unverified connections.
 
 #### func (Frame) SendTNC
 
@@ -121,6 +147,15 @@ func (f Frame) SendTNC(dial string) (err error)
 ```
 SendTNC sends a Frame to the specified network TNC device using the KISS
 protocol for transmission over RF.
+
+#### func (Frame) SendUDP
+
+```go
+func (f Frame) SendUDP(dial string, pass int) (err error)
+```
+SendUDP sends a Frame to the specified APRS-IS host over the UDP protocol. This
+scheme is the most efficient but requires a verified connection (real callsign
+and passcode) and has no acknowledgement of receipt.
 
 #### func (Frame) String
 
