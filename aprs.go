@@ -6,8 +6,8 @@
 // those packets via APRS-IS or transmit them via TNC KISS.
 package aprs
 
-// SwName is the default software name.  It can be overridden after import.
+// SwName is the default software name.
 var SwName = "Go"
 
-// SwVers is the default software version.  It can be overridden after import.
+// SwVers is the default software version.
 var SwVers = "2"

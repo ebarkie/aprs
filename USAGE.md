@@ -31,12 +31,12 @@ Errors.
 ```go
 var SwName = "Go"
 ```
-SwName is the default software name. It can be overridden after import.
+SwName is the default software name.
 
 ```go
 var SwVers = "2"
 ```
-SwVers is the default software version. It can be overridden after import.
+SwVers is the default software version.
 
 #### func  GenPass
 
@@ -68,7 +68,7 @@ Bytes converts an Address into its TNC byte representation.
 #### func (*Address) FromBytes
 
 ```go
-func (a *Address) FromBytes(addr []byte) (err error)
+func (a *Address) FromBytes(addr []byte) error
 ```
 FromBytes converts a TNC byte address into an Address.
 
@@ -110,7 +110,7 @@ via KISS.
 #### func (*Frame) FromBytes
 
 ```go
-func (f *Frame) FromBytes(frame []byte) (err error)
+func (f *Frame) FromBytes(frame []byte) error
 ```
 FromBytes converts a TNC byte Frame into a Frame.
 
