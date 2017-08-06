@@ -36,7 +36,7 @@ func (f Frame) String() (frame string) {
 	for i := 0; i < len(f.Path); i++ {
 		a := f.Path[i]
 		// Is there another address in the path and is it repeated?
-		if ((i + 1) < len(f.Path)) && f.Path[i+1].Repeated {
+		if i+1 < len(f.Path) && f.Path[i+1].Repeated {
 			a.Repeated = false
 		}
 		frame += fmt.Sprintf(",%s", a)

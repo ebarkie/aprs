@@ -53,7 +53,7 @@ func (a *Address) FromString(addr string) (err error) {
 		err = fmt.Errorf("Address error: Callsign length %d > 6", len(a.Call))
 		return
 	}
-	if (a.SSID < 0) || (a.SSID > 15) {
+	if a.SSID < 0 || a.SSID > 15 {
 		err = fmt.Errorf("Address error: %d not > 0 & < 15", a.SSID)
 		return
 	}
