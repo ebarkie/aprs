@@ -42,12 +42,12 @@ func (a Address) Bytes() []byte {
 
 	// The last byte has the following bit breakdown:
 	//
-	// Bit: 7        | 6        | 5        | 4 3 2 1 | 0       |
-	//	-------- +----------+----------+---------+---------+
-	//      Repeated | Reserved | Reserved | SSID    | Last    |
-	//	---------+----------+----------+---------+---------+
-	//      0 = No   | 1        | 1        | 7-bit   | 0 = No  |
-	//	1 = Yes  |          |          |         | 1 = Yes |
+	// Bit  7        | 6        | 5        | 4 3 2 1 | 0
+	//     ----------+----------+----------+---------+---------
+	//      Repeated | Reserved | Reserved | SSID    | Last
+	//     ----------+----------+----------+---------+---------
+	//      0 = No   | 1        | 1        | 7-bit   | 0 = No
+	//      1 = Yes  |          |          |         | 1 = Yes
 	bs[6] = (byte(a.SSID) << 1) | 0x60
 	if a.Repeated {
 		bs[6] |= 0x80 // Set bit 7
@@ -73,12 +73,12 @@ func (a *Address) FromBytes(addr []byte) error {
 
 	// The last byte has the following bit breakdown:
 	//
-	// Bit: 7        | 6        | 5        | 4 3 2 1 | 0       |
-	//      -------- +----------+----------+---------+---------+
-	//      Repeated | Reserved | Reserved | SSID    | Last    |
-	//      ---------+----------+----------+---------+---------+
-	//      0 = No   | 1        | 1        | 7-bit   | 0 = No  |
-	//      1 = Yes  |          |          |         | 1 = Yes |
+	// Bit  7        | 6        | 5        | 4 3 2 1 | 0
+	//     ----------+----------+----------+---------+---------
+	//      Repeated | Reserved | Reserved | SSID    | Last
+	//     ----------+----------+----------+---------+---------
+	//      0 = No   | 1        | 1        | 7-bit   | 0 = No
+	//      1 = Yes  |          |          |         | 1 = Yes
 	a.SSID = int(addr[6] & 0x1e >> 1)
 	if addr[6]&0x01 > 0 {
 		a.last = true
