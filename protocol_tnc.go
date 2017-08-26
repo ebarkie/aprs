@@ -13,16 +13,13 @@ import (
 )
 
 const (
-	fend = 0xc0 // Frame end
-	fesc = 0xdb // Frame escape
+	fend  = 0xc0 // Frame end
+	tfend = 0xdc // Transformed frame end
+	fesc  = 0xdb // Frame escape
+	tfesc = 0xdd // Transformed frame escape
 )
 
 func kissEscape(b []byte) []byte {
-	const (
-		tfend = 0xdc // Transposed frame end
-		tfesc = 0xdd // Transposed frame escape
-	)
-
 	buf := bytes.NewBuffer([]byte{})
 	for i := range b {
 		switch b[i] {
