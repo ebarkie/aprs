@@ -6,6 +6,19 @@
 // those packets via APRS-IS or transmit them via TNC KISS.
 package aprs
 
+import "errors"
+
+// Errors.
+var (
+	ErrFrameBadControl  = errors.New("Frame error: Control Field not UI-frame")
+	ErrFrameBadProtocol = errors.New("Frame error: Protocol ID not no layer 3 protocol")
+	ErrFrameIncomplete  = errors.New("Frame error: incomplete")
+	ErrFrameNoLast      = errors.New("Frame error: incomplete or last path not set")
+	ErrFrameShort       = errors.New("Frame error: too short (16-bytes minimum)")
+	ErrNotVerified      = errors.New("Not verified but scheme requires it")
+	ErrUnhandledScheme  = errors.New("Unhandled scheme")
+)
+
 // SwName is the default software name.
 var SwName = "Go"
 

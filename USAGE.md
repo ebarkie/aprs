@@ -16,14 +16,8 @@ var (
 	ErrFrameIncomplete  = errors.New("Frame error: incomplete")
 	ErrFrameNoLast      = errors.New("Frame error: incomplete or last path not set")
 	ErrFrameShort       = errors.New("Frame error: too short (16-bytes minimum)")
-)
-```
-Errors.
-
-```go
-var (
-	ErrNotVerified     = errors.New("Not verified but scheme requires it")
-	ErrUnhandledScheme = errors.New("Unhandled scheme")
+	ErrNotVerified      = errors.New("Not verified but scheme requires it")
+	ErrUnhandledScheme  = errors.New("Unhandled scheme")
 )
 ```
 Errors.

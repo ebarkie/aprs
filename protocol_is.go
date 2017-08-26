@@ -7,19 +7,12 @@ package aprs
 import (
 	"bufio"
 	"bytes"
-	"errors"
 	"fmt"
 	"net"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
-)
-
-// Errors.
-var (
-	ErrNotVerified     = errors.New("Not verified but scheme requires it")
-	ErrUnhandledScheme = errors.New("Unhandled scheme")
 )
 
 // GenPass generates a verification passcode for the given station.

@@ -9,7 +9,6 @@ package aprs
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	"strings"
 )
@@ -17,15 +16,6 @@ import (
 const (
 	uiFrame    = 0x03
 	protocolID = 0xf0
-)
-
-// Errors.
-var (
-	ErrFrameBadControl  = errors.New("Frame error: Control Field not UI-frame")
-	ErrFrameBadProtocol = errors.New("Frame error: Protocol ID not no layer 3 protocol")
-	ErrFrameIncomplete  = errors.New("Frame error: incomplete")
-	ErrFrameNoLast      = errors.New("Frame error: incomplete or last path not set")
-	ErrFrameShort       = errors.New("Frame error: too short (16-bytes minimum)")
 )
 
 // Bytes converts an Address into its TNC byte representation.
