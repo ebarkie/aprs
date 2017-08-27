@@ -13,7 +13,7 @@ import (
 	"strings"
 )
 
-// String returns the Address as a string.
+// String returns the Address as a TNC2 formatted string.
 func (a Address) String() (addr string) {
 	addr = a.Call
 	if a.SSID > 0 {
@@ -26,9 +26,9 @@ func (a Address) String() (addr string) {
 	return
 }
 
-// FromString sets the Frame from an APRS-IS style string.
+// FromString sets the Frame from a TNC2 formatted string.
 //
-// This strictly enforces the AX.25 specifciation and will
+// This strictly enforces the AX.25 specification and will
 // return errors if callsigns are greater than 6 characters or
 // SSID's are not numeric values between 0 and 15.
 func (f *Frame) FromString(frame string) (err error) {
@@ -61,8 +61,8 @@ func (f *Frame) FromString(frame string) (err error) {
 	return
 }
 
-// String returns the Frame as a string.  This is suitable for sending
-// to APRS-IS.
+// String returns the Frame as a TNC2 formatted string.  This is
+// suitable for sending to APRS-IS servers.
 func (f Frame) String() (frame string) {
 	// We have to manipulate the Addresses a little because only
 	// the last repeated address should have an asterisk.

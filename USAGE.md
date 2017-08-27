@@ -89,7 +89,7 @@ FromString sets the Address from a string.
 ```go
 func (a Address) String() (addr string)
 ```
-String returns the Address as a string.
+String returns the Address as a TNC2 formatted string.
 
 #### type Frame
 
@@ -124,9 +124,9 @@ FromBytes sets the Frame from an AX.25 byte slice.
 ```go
 func (f *Frame) FromString(frame string) (err error)
 ```
-FromString sets the Frame from an APRS-IS style string.
+FromString sets the Frame from a TNC2 formatted string.
 
-This strictly enforces the AX.25 specifciation and will return errors if
+This strictly enforces the AX.25 specification and will return errors if
 callsigns are greater than 6 characters or SSID's are not numeric values between
 0 and 15.
 
@@ -178,7 +178,8 @@ and passcode) and has no acknowledgement of receipt.
 ```go
 func (f Frame) String() (frame string)
 ```
-String returns the Frame as a string. This is suitable for sending to APRS-IS.
+String returns the Frame as a TNC2 formatted string. This is suitable for
+sending to APRS-IS servers.
 
 #### type Path
 
