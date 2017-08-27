@@ -1,26 +1,3 @@
-# APRS
-
-[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](http://choosealicense.com/licenses/mit/)
-[![Build Status](https://travis-ci.org/ebarkie/aprs.svg?branch=master)](https://travis-ci.org/ebarkie/aprs)
-
-Go package for working with APRS string and byte packets.  It can upload those
-packets via APRS-IS or transmit them via TNC KISS.
-
-It fully supports creating weather observations for [Citizen Weather Observer Program (CWOP)](http://wxqa.com).
-
-## Installation
-
-```
-$ go get github.com/ebarkie/aprs
-```
-
-## Usage
-
-See [USAGE](USAGE.md).
-
-## Example
-
-```go
 package main
 
 import (
@@ -64,10 +41,3 @@ func main() {
 		log.Printf("Network TNC transmit error: %s", err)
 	}
 }
-```
-
-## License
-
-Copyright (c) 2016-2017 Eric Barkie.  All rights reserved.  
-Use of this source code is governed by the MIT license
-that can be found in the [LICENSE](LICENSE) file.

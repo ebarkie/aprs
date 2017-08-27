@@ -30,7 +30,7 @@ type Address struct {
 // Path represents the APRS digipath.
 type Path []Address
 
-// FromString converts a text address into an Address.
+// FromString sets the Address from a string.
 func (a *Address) FromString(addr string) (err error) {
 	if strings.HasSuffix(addr, "*") {
 		a.Repeated = true
@@ -61,8 +61,8 @@ func (a *Address) FromString(addr string) (err error) {
 	return
 }
 
-// FromString converts a list of comma separated addreses into a
-// Path.
+// FromString sets the Path from a string of comma separated
+// addresses.
 func (p *Path) FromString(path string) (err error) {
 	for _, as := range strings.Split(path, ",") {
 		a := Address{}

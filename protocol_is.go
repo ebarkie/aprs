@@ -7,6 +7,7 @@ package aprs
 import (
 	"bufio"
 	"bytes"
+	"context"
 	"fmt"
 	"net"
 	"net/http"
@@ -14,6 +15,20 @@ import (
 	"strings"
 	"time"
 )
+
+func genLogin(user Address, pass int) string {
+	return fmt.Sprintf("user %s pass %d vers %s %s", user, pass, SwName, SwVers)
+}
+
+func readLine(conn net.Conn, d time.Duration) (string, error) {
+	if d > 0 {
+		conn.SetReadDeadline(time.Now().Add(d))
+	} else {
+		conn.SetReadDeadline(time.Time{})
+	}
+	s, err := bufio.NewReader(conn).ReadString('\n')
+	return strings.TrimSpace(s), err
+}
 
 // GenPass generates a verification passcode for the given station.
 func GenPass(call string) (pass uint16) {
@@ -38,12 +53,75 @@ func GenPass(call string) (pass uint16) {
 	return
 }
 
-func readLine(conn net.Conn) (string, error) {
-	const socketTimeout = 5 * time.Second
+// RecvIS receives APRS-IS frames over tcp from the specified server.
+// Filter(s) are optional and use the following syntax:
+//
+// http://www.aprs-is.net/javAPRSFilter.aspx
+func RecvIS(ctx context.Context, dial string, user Address, pass int, filters ...string) <-chan Frame {
+	fc := make(chan Frame)
 
-	conn.SetReadDeadline(time.Now().Add(socketTimeout))
-	s, err := bufio.NewReader(conn).ReadString('\n')
-	return strings.TrimSpace(s), err
+	go func() {
+		defer close(fc)
+
+		conn, err := net.Dial("tcp", dial)
+		if err != nil {
+			return
+		}
+		defer conn.Close()
+
+		// Read welcome banner
+		_, err = readLine(conn, 5*time.Second)
+		if err != nil {
+			return
+		}
+
+		// Login
+		login := genLogin(user, pass)
+		if len(filters) > 0 {
+			login += " filter " + strings.Join(filters, " ")
+		}
+		_, err = fmt.Fprintf(conn, "%s\r\n", login)
+		if err != nil {
+			return
+		}
+		// # logresp CWxxxx unverified, server CWOP-7
+		// # logresp CWxxxx unverified, server THIRD
+		_, err = readLine(conn, 5*time.Second)
+		if err != nil {
+			return
+		}
+
+		// Listen for frames until either the connection is closed or a
+		// context cancel is received.
+		var s string
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			default:
+			}
+
+			// Heartbeats come across every 20 seconds so that's the
+			// longest the read should block.  It's also the longest
+			// it would take for a context cancel to be processed.
+			s, err = readLine(conn, 30*time.Second)
+			if err != nil {
+				return
+			}
+
+			// # aprsc 2.1.4-g408ed49 26 Aug 2017 16:49:48 GMT FIFTH 44.74.128.25:14580
+			if !strings.HasPrefix(s, "#") {
+				f := Frame{}
+				err = f.FromString(s)
+				if err != nil {
+					continue
+				}
+				fc <- f
+			}
+		}
+	}()
+
+	return fc
 }
 
 // SendIS sends a Frame to the specified APRS-IS dial string.  The
@@ -68,7 +146,7 @@ func (f Frame) SendIS(dial string, pass int) error {
 		return f.SendUDP(parts[1], pass)
 	}
 
-	return ErrUnhandledScheme
+	return ErrProtoScheme
 }
 
 // SendHTTP sends a Frame to the specified APRS-IS host over the
@@ -77,11 +155,11 @@ func (f Frame) SendIS(dial string, pass int) error {
 // reliable and provides acknowledgement of receipt.
 func (f Frame) SendHTTP(dial string, pass int) (err error) {
 	if pass < 0 {
-		err = ErrNotVerified
+		err = ErrCallNotVerified
 		return
 	}
 
-	data := fmt.Sprintf("user %s pass %d vers %s %s\r\n%s", f.Src, pass, SwName, SwVers, f)
+	data := fmt.Sprintf("%s\r\n%s", genLogin(f.Src, pass), f)
 
 	var req *http.Request
 	req, err = http.NewRequest("POST", dial, bytes.NewBufferString(data))
@@ -113,7 +191,7 @@ func (f Frame) SendHTTP(dial string, pass int) (err error) {
 // acknowledgement of receipt.
 func (f Frame) SendUDP(dial string, pass int) (err error) {
 	if pass < 0 {
-		err = ErrNotVerified
+		err = ErrCallNotVerified
 		return
 	}
 
@@ -125,7 +203,7 @@ func (f Frame) SendUDP(dial string, pass int) (err error) {
 	defer conn.Close()
 
 	// Send data packet
-	fmt.Fprintf(conn, "user %s pass %d vers %s %s\r\n%s", f.Src, pass, SwName, SwVers, f)
+	_, err = fmt.Fprintf(conn, "%s\r\n%s", genLogin(f.Src, pass), f)
 
 	return
 }
@@ -142,23 +220,25 @@ func (f Frame) SendTCP(dial string, pass int) (err error) {
 	defer conn.Close()
 
 	// Read welcome banner
-	_, err = readLine(conn)
+	_, err = readLine(conn, 5*time.Second)
 	if err != nil {
 		return
 	}
 
 	// Login
-	fmt.Fprintf(conn, "user %s pass %d vers %s %s\r\n", f.Src, pass, SwName, SwVers)
-
+	_, err = fmt.Fprintf(conn, "%s\r\n", genLogin(f.Src, pass))
+	if err != nil {
+		return
+	}
 	// # logresp CWxxxx unverified, server CWOP-7
 	// # logresp CWxxxx unverified, server THIRD
-	_, err = readLine(conn)
+	_, err = readLine(conn, 5*time.Second)
 	if err != nil {
 		return
 	}
 
 	// Send frame
-	fmt.Fprintf(conn, "%s\r\n", f)
+	_, err = fmt.Fprintf(conn, "%s\r\n", f)
 
 	return
 }

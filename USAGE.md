@@ -11,13 +11,14 @@ packets via APRS-IS or transmit them via TNC KISS.
 
 ```go
 var (
-	ErrFrameBadControl  = errors.New("Frame error: Control Field not UI-frame")
-	ErrFrameBadProtocol = errors.New("Frame error: Protocol ID not no layer 3 protocol")
-	ErrFrameIncomplete  = errors.New("Frame error: incomplete")
-	ErrFrameNoLast      = errors.New("Frame error: incomplete or last path not set")
-	ErrFrameShort       = errors.New("Frame error: too short (16-bytes minimum)")
-	ErrNotVerified      = errors.New("Not verified but scheme requires it")
-	ErrUnhandledScheme  = errors.New("Unhandled scheme")
+	ErrCallNotVerified = errors.New("Callsign not verified")
+	ErrFrameBadControl = errors.New("Frame Control Field not UI-frame")
+	ErrFrameBadProto   = errors.New("Frame Protocol ID not no layer 3 protocol")
+	ErrFrameIncomplete = errors.New("Frame incomplete")
+	ErrFrameInvalid    = errors.New("Frame is invalid")
+	ErrFrameNoLast     = errors.New("Frame incomplete or last path not set")
+	ErrFrameShort      = errors.New("Frame too short (16-bytes minimum)")
+	ErrProtoScheme     = errors.New("Protocol scheme is unknown")
 )
 ```
 Errors.
@@ -28,7 +29,7 @@ var SwName = "Go"
 SwName is the default software name.
 
 ```go
-var SwVers = "2"
+var SwVers = "3"
 ```
 SwVers is the default software version.
 
@@ -38,6 +39,16 @@ SwVers is the default software version.
 func GenPass(call string) (pass uint16)
 ```
 GenPass generates a verification passcode for the given station.
+
+#### func  RecvIS
+
+```go
+func RecvIS(ctx context.Context, dial string, user Address, pass int, filters ...string) <-chan Frame
+```
+RecvIS receives APRS-IS frames over tcp from the specified server. Filter(s) are
+optional and use the following syntax:
+
+http://www.aprs-is.net/javAPRSFilter.aspx
 
 #### type Address
 
@@ -57,28 +68,28 @@ Address represents an APRS callsign, SSID, and associated metadata.
 ```go
 func (a Address) Bytes() []byte
 ```
-Bytes converts an Address into its TNC byte representation.
+Bytes returns the Address in AX.25 byte format.
 
 #### func (*Address) FromBytes
 
 ```go
 func (a *Address) FromBytes(addr []byte) error
 ```
-FromBytes converts a TNC byte address into an Address.
+FromBytes sets the Address from an AX.25 byte slice.
 
 #### func (*Address) FromString
 
 ```go
 func (a *Address) FromString(addr string) (err error)
 ```
-FromString converts a text address into an Address.
+FromString sets the Address from a string.
 
 #### func (Address) String
 
 ```go
 func (a Address) String() (addr string)
 ```
-String converts an Address into its text representation.
+String returns the Address as a string.
 
 #### type Frame
 
@@ -98,15 +109,26 @@ Frame represents a complete APRS frame.
 ```go
 func (f Frame) Bytes() []byte
 ```
-Bytes converts a Frame into its TNC byte representation appropriate for sending
-via KISS.
+Bytes returns the Frame in AX.25 byte format. This is suitable for sending to a
+TNC.
 
 #### func (*Frame) FromBytes
 
 ```go
 func (f *Frame) FromBytes(frame []byte) error
 ```
-FromBytes converts a TNC byte Frame into a Frame.
+FromBytes sets the Frame from an AX.25 byte slice.
+
+#### func (*Frame) FromString
+
+```go
+func (f *Frame) FromString(frame string) (err error)
+```
+FromString sets the Frame from an APRS-IS style string.
+
+This strictly enforces the AX.25 specifciation and will return errors if
+callsigns are greater than 6 characters or SSID's are not numeric values between
+0 and 15.
 
 #### func (Frame) SendHTTP
 
@@ -126,6 +148,14 @@ SendIS sends a Frame to the specified APRS-IS dial string. The dial string
 should be in the form scheme://host:port with scheme being http, tcp, or udp.
 This is most commonly used for CWOP.
 
+#### func (Frame) SendKISS
+
+```go
+func (f Frame) SendKISS(dial string) (err error)
+```
+SendKISS sends a Frame to the specified network TNC device using the KISS
+protocol for transmission over RF.
+
 #### func (Frame) SendTCP
 
 ```go
@@ -133,14 +163,6 @@ func (f Frame) SendTCP(dial string, pass int) (err error)
 ```
 SendTCP sends a Frame to the specified APRS-IS host over the TCP protocol. This
 scheme is the oldest, most compatible, and allows unverified connections.
-
-#### func (Frame) SendTNC
-
-```go
-func (f Frame) SendTNC(dial string) (err error)
-```
-SendTNC sends a Frame to the specified network TNC device using the KISS
-protocol for transmission over RF.
 
 #### func (Frame) SendUDP
 
@@ -156,8 +178,7 @@ and passcode) and has no acknowledgement of receipt.
 ```go
 func (f Frame) String() (frame string)
 ```
-String converts a Frame into its text representation appropriate for printing or
-sending via APRS-IS.
+String returns the Frame as a string. This is suitable for sending to APRS-IS.
 
 #### type Path
 
@@ -172,7 +193,7 @@ Path represents the APRS digipath.
 ```go
 func (p *Path) FromString(path string) (err error)
 ```
-FromString converts a list of comma separated addreses into a Path.
+FromString sets the Path from a string of comma separated addresses.
 
 #### type Wx
 

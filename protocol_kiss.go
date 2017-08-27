@@ -35,9 +35,9 @@ func kissEscape(b []byte) []byte {
 	return buf.Bytes()
 }
 
-// SendTNC sends a Frame to the specified network TNC device
+// SendKISS sends a Frame to the specified network TNC device
 // using the KISS protocol for transmission over RF.
-func (f Frame) SendTNC(dial string) (err error) {
+func (f Frame) SendKISS(dial string) (err error) {
 	const (
 		cmdData   = 0x00 // Frame contains data that should be sent out of the TNC
 		cmdReturn = 0xff // Exit KISS mode

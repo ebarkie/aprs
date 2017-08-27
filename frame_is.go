@@ -7,9 +7,13 @@
 
 package aprs
 
-import "fmt"
+import (
+	"fmt"
+	"regexp"
+	"strings"
+)
 
-// String converts an Address into its text representation.
+// String returns the Address as a string.
 func (a Address) String() (addr string) {
 	addr = a.Call
 	if a.SSID > 0 {
@@ -22,8 +26,43 @@ func (a Address) String() (addr string) {
 	return
 }
 
-// String converts a Frame into its text representation appropriate
-// for printing or sending via APRS-IS.
+// FromString sets the Frame from an APRS-IS style string.
+//
+// This strictly enforces the AX.25 specifciation and will
+// return errors if callsigns are greater than 6 characters or
+// SSID's are not numeric values between 0 and 15.
+func (f *Frame) FromString(frame string) (err error) {
+	// SRC>DST[,PATH]:TEXT
+	const reCall = "[[:alnum:]]{1,6}(?:-(?:[0-9]|1[0-5]))?"
+	re := regexp.MustCompile(fmt.Sprintf("^(%[1]s)>(%[1]s)((?:(?:,)(?:%[1]s\\*?))*):(.*)", reCall))
+
+	matches := re.FindStringSubmatch(frame)
+	if matches == nil {
+		err = ErrFrameInvalid
+		return
+	}
+
+	// Nothing should ever error unless there is a mistake
+	// in the regular expression.
+	err = f.Src.FromString(matches[1])
+	if err != nil {
+		return
+	}
+	err = f.Dst.FromString(matches[2])
+	if err != nil {
+		return
+	}
+	err = f.Path.FromString(strings.TrimLeft(matches[3], ","))
+	if err != nil {
+		return
+	}
+	f.Text = matches[4]
+
+	return
+}
+
+// String returns the Frame as a string.  This is suitable for sending
+// to APRS-IS.
 func (f Frame) String() (frame string) {
 	// We have to manipulate the Addresses a little because only
 	// the last repeated address should have an asterisk.

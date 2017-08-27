@@ -18,7 +18,7 @@ const (
 	protocolID = 0xf0
 )
 
-// Bytes converts an Address into its TNC byte representation.
+// Bytes returns the Address in AX.25 byte format.
 func (a Address) Bytes() []byte {
 	// AX.25 addresses are always 7-bytes:
 	//	6-bytes/characters 7-bit ASCI encoded for the callsign.
@@ -49,7 +49,7 @@ func (a Address) Bytes() []byte {
 	return bs
 }
 
-// FromBytes converts a TNC byte address into an Address.
+// FromBytes sets the Address from an AX.25 byte slice.
 func (a *Address) FromBytes(addr []byte) error {
 	if len(addr) != 7 {
 		return fmt.Errorf("Address error: size mismatch %d != 7-bytes", len(addr))
@@ -80,8 +80,8 @@ func (a *Address) FromBytes(addr []byte) error {
 	return nil
 }
 
-// Bytes converts a Frame into its TNC byte representation appropriate
-// for sending via KISS.
+// Bytes returns the Frame in AX.25 byte format.  This is suitable for
+// sending to a TNC.
 func (f Frame) Bytes() []byte {
 	// Frame format is:
 	//
@@ -111,7 +111,7 @@ func (f Frame) Bytes() []byte {
 	return buf.Bytes()
 }
 
-// FromBytes converts a TNC byte Frame into a Frame.
+// FromBytes sets the Frame from an AX.25 byte slice.
 func (f *Frame) FromBytes(frame []byte) error {
 	if len(frame) < 16 {
 		return ErrFrameShort
@@ -154,7 +154,7 @@ func (f *Frame) FromBytes(frame []byte) error {
 
 	// Protocol ID (always no layer 3 protocol)
 	if frame[i+1] != protocolID {
-		return ErrFrameBadProtocol
+		return ErrFrameBadProto
 	}
 
 	f.Text = string(frame[i+2:]) // Information Field

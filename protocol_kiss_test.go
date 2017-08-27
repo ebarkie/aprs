@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestKissEscape(t *testing.T) {
+func TestKISSEscape(t *testing.T) {
 	for _, test := range []struct {
 		from []byte
 		to   []byte
