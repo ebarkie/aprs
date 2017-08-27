@@ -10,14 +10,14 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var tnc2FramesBad = []string{
+var tnc2Bad = []string{
 	"N0CALLL>APZ001:Hello world",
 	"N0CALL-16>APZ001:Hello world",
 	"N0CALL-XX>APZ001:Hello world",
 	"N0CALL>APZ001,N0CALL-XX:Hello world",
 }
 
-var tnc2FramesGood = []string{
+var tnc2Good = []string{
 	"N0CALL>APZ001:Hello world",
 	"N0CALL-13>APZ001:Hello world",
 	"N0CALL-13>APZ001,WIDE1-1,WIDE2-1:Hello world",
@@ -45,13 +45,13 @@ func TestAddressString(t *testing.T) {
 func TestFrameFromString(t *testing.T) {
 	a := assert.New(t)
 
-	for _, s := range tnc2FramesBad {
+	for _, s := range tnc2Bad {
 		f := Frame{}
 		err := f.FromString(s)
 		a.NotNil(err, "Invalid frame: "+s)
 	}
 
-	for _, s := range tnc2FramesGood {
+	for _, s := range tnc2Good {
 		f := Frame{}
 		err := f.FromString(s)
 		a.Nil(err, "Valid frame: "+s)
