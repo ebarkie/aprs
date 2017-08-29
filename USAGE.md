@@ -203,99 +203,34 @@ type Wx struct {
 	Lat  float64
 	Lon  float64
 	Type string
+
+	Timestamp time.Time
+
+	Altimeter       float64
+	Humidity        int
+	RainRate        float64
+	RainLast24Hours float64
+	RainToday       float64
+	SolarRad        int
+	Temp            int
+	WindDir         int
+	WindGust        int
+	WindSpeed       int
 }
 ```
 
-Wx holds the weather station information.
-
-#### func (*Wx) Altimeter
-
-```go
-func (w *Wx) Altimeter(f float64)
-```
-Altimeter is the barometric pressure as altimeter (station plus elevation
-correction) in inches.
-
-#### func (*Wx) Clear
-
-```go
-func (w *Wx) Clear()
-```
-Clear clears all measurements in the observation payload.
-
-#### func (*Wx) Humidity
-
-```go
-func (w *Wx) Humidity(i int)
-```
-Humidity is the relative humidity.
-
-#### func (*Wx) RainLast24Hours
-
-```go
-func (w *Wx) RainLast24Hours(f float64)
-```
-RainLast24Hours is the rain accumulation for the last 24 hours in inches.
-
-#### func (*Wx) RainRate
-
-```go
-func (w *Wx) RainRate(f float64)
-```
-RainRate is the rain accumulation for the last hour in inches.
-
-#### func (*Wx) RainToday
-
-```go
-func (w *Wx) RainToday(f float64)
-```
-RainToday is the rain accumulation so far today in inches.
-
-#### func (*Wx) SolarRadiation
-
-```go
-func (w *Wx) SolarRadiation(i int)
-```
-SolarRadiation is the solar radiation in W/m^2.
+Wx represents a weather station observation.
 
 #### func (Wx) String
 
 ```go
-func (w Wx) String() (t string)
+func (w Wx) String() (s string)
 ```
 String returns an APRS packet for the provided measurements.
 
-#### func (*Wx) Temperature
+#### func (*Wx) Zero
 
 ```go
-func (w *Wx) Temperature(f float64)
+func (w *Wx) Zero()
 ```
-Temperature is the temperature in F.
-
-#### func (*Wx) Timestamp
-
-```go
-func (w *Wx) Timestamp(t time.Time)
-```
-Timestamp is the time of the observation.
-
-#### func (*Wx) WindDirection
-
-```go
-func (w *Wx) WindDirection(i int)
-```
-WindDirection is the wind direction in degrees.
-
-#### func (*Wx) WindGust
-
-```go
-func (w *Wx) WindGust(i int)
-```
-WindGust is the peak wind speed for the previous 5 minutes in mph.
-
-#### func (*Wx) WindSpeed
-
-```go
-func (w *Wx) WindSpeed(i int)
-```
-WindSpeed is the wind speed in mph.
+Zero zeroes all measurements in the observation payload.

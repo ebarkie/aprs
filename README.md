@@ -35,13 +35,13 @@ func main() {
 		Lon:  -78.7,
 		Type: "DvsVP2+",
 	}
-	w.Altimeter(29.70)
-	w.Humidity(90)
-	w.RainRate(0.00)
-	w.RainLast24Hours(0.10)
-	w.Temperature(85)
-	w.WindDirection(180)
-	w.WindSpeed(5)
+	w.Altimeter = 29.70
+	w.Humidity = 90
+	w.RainRate = 0.0
+	w.RainLast24Hours = 0.10
+	w.Temp = 85
+	w.WindDir = 180
+	w.WindSpeed = 5
 
 	f := aprs.Frame{
 		Dst:  aprs.Address{Call: "APRS"},
