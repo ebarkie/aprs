@@ -44,7 +44,7 @@ func TestWxText(t *testing.T) {
 	w.WindSpeed = 8
 	a.Equal(p+"180/008g...t...r...p...P...h..b....."+s, w.String())
 	w.WindGust = 0
-	a.Equal(p+"180/008g...t...r...p...P...h..b....."+s, w.String())
+	a.Equal(p+"180/008g000t...r...p...P...h..b....."+s, w.String())
 	w.WindGust = 16
 	a.Equal(p+"180/008g016t...r...p...P...h..b....."+s, w.String())
 

@@ -42,7 +42,7 @@ func (w *Wx) Zero() {
 	w.SolarRad = -1
 	w.Temp = -100
 	w.WindDir = -1
-	w.WindGust = 0
+	w.WindGust = -1
 	w.WindSpeed = -1
 }
 
@@ -108,7 +108,7 @@ func (w Wx) String() (s string) {
 		s += fmt.Sprintf("/%03d", w.WindSpeed)
 	}
 
-	if w.WindGust < 1 {
+	if w.WindGust < 0 {
 		s += "g..."
 	} else {
 		s += fmt.Sprintf("g%03d", w.WindGust)
