@@ -84,7 +84,6 @@ func (w Wx) String() (s string) {
 
 	// Timestamp as UTC two digit day, hour, and minute.
 	if w.Timestamp.IsZero() {
-		fmt.Println("doh!")
 		w.Timestamp = time.Now()
 	}
 
