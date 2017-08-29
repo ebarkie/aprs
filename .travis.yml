@@ -1,7 +1,3 @@
 language: go
 go:
   - master
-install:
-  - go get -t -v
-script:
-  - go test -v
