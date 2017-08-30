@@ -11,8 +11,6 @@ import (
 )
 
 func TestGenPass(t *testing.T) {
-	a := assert.New(t)
-
 	p := GenPass("N0CALL")
-	a.Equal(13023, int(p), "Passcode mismatch")
+	assert.Equal(t, 13023, int(p), "Passcode mismatch")
 }
