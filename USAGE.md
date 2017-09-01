@@ -208,7 +208,7 @@ type Wx struct {
 
 	Altimeter       float64
 	Humidity        int
-	RainRate        float64
+	RainLastHour    float64
 	RainLast24Hours float64
 	RainToday       float64
 	SolarRad        int

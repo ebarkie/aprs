@@ -37,7 +37,7 @@ func main() {
 	}
 	w.Altimeter = 29.70
 	w.Humidity = 90
-	w.RainRate = 0.0
+	w.RainLastHour = 0.0
 	w.RainLast24Hours = 0.10
 	w.Temp = 85
 	w.WindDir = 180

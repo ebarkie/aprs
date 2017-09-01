@@ -74,12 +74,12 @@ func ExampleWx_String_luminosity() {
 func ExampleWx_String_rain() {
 	w := testWx
 
-	w.RainRate = 0.0
+	w.RainLastHour = 0.0
 	w.RainLast24Hours = 0.0
 	w.RainToday = 0.0
 	fmt.Println(w)
 
-	w.RainRate = 0.54
+	w.RainLastHour = 0.54
 	w.RainLast24Hours = 0.23
 	w.RainToday = 0.21
 	fmt.Println(w)

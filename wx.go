@@ -20,7 +20,7 @@ type Wx struct {
 
 	Altimeter       float64
 	Humidity        int
-	RainRate        float64
+	RainLastHour    float64
 	RainLast24Hours float64
 	RainToday       float64
 	SolarRad        int
@@ -36,7 +36,7 @@ func (w *Wx) Zero() {
 
 	w.Altimeter = 0
 	w.Humidity = -1
-	w.RainRate = -1.0
+	w.RainLastHour = -1.0
 	w.RainLast24Hours = -1.0
 	w.RainToday = -1.0
 	w.SolarRad = -1
@@ -120,10 +120,10 @@ func (w Wx) String() (s string) {
 		s += fmt.Sprintf("t%03d", w.Temp)
 	}
 
-	if w.RainRate < 0.0 {
+	if w.RainLastHour < 0.0 {
 		s += "r..."
 	} else {
-		s += fmt.Sprintf("r%03.0f", w.RainRate*100.0)
+		s += fmt.Sprintf("r%03.0f", w.RainLastHour*100.0)
 	}
 
 	if w.RainLast24Hours < 0.0 {
