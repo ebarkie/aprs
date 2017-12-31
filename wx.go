@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"math"
 	"time"
+
+	"github.com/ebarkie/weatherlink/units"
 )
 
 // Wx represents a weather station observation.
@@ -147,7 +149,7 @@ func (w Wx) String() (s string) {
 	if w.Altimeter <= 0.0 {
 		s += "b....."
 	} else {
-		s += fmt.Sprintf("b%05.0f", w.Altimeter*33.8637526*10)
+		s += fmt.Sprintf("b%05.0f", units.Mb(w.Altimeter)*10)
 	}
 
 	if w.SolarRad >= 1000 {
