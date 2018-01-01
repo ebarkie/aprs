@@ -149,7 +149,7 @@ func (w Wx) String() (s string) {
 	if w.Altimeter <= 0.0 {
 		s += "b....."
 	} else {
-		s += fmt.Sprintf("b%05.0f", units.FromMercuryIn(w.Altimeter).Mb()*10.0)
+		s += fmt.Sprintf("b%05.0f", units.Pressure(w.Altimeter*units.Inches).Millibars()*10.0)
 	}
 
 	if w.SolarRad >= 1000 {
