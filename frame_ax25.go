@@ -18,8 +18,8 @@ const (
 	protocolID = 0xf0
 )
 
-// Bytes returns the Address in AX.25 byte format.
-func (a Address) Bytes() []byte {
+// Bytes returns the address in AX.25 byte format.
+func (a Addr) Bytes() []byte {
 	// AX.25 addresses are always 7-bytes:
 	//	6-bytes/characters 7-bit ASCI encoded for the callsign.
 	//	1-byte for the SSID and other data.
@@ -49,8 +49,8 @@ func (a Address) Bytes() []byte {
 	return bs
 }
 
-// FromBytes sets the Address from an AX.25 byte slice.
-func (a *Address) FromBytes(addr []byte) error {
+// FromBytes sets the address from an AX.25 byte slice.
+func (a *Addr) FromBytes(addr []byte) error {
 	if len(addr) != 7 {
 		return fmt.Errorf("Address error: size mismatch %d != 7-bytes", len(addr))
 	}
@@ -85,7 +85,7 @@ func (a *Address) FromBytes(addr []byte) error {
 func (f Frame) Bytes() []byte {
 	// Frame format is:
 	//
-	// Destination Address | Source Address | Path (0-8) | Control Field | Protocol ID | Information Field
+	// Destination address | Source address | Path (0-8) | Control field | Protocol ID | Information field
 	//             7-bytes |        7-bytes | 0-56 bytes |        1-byte |      1-byte | 1-256 bytes
 
 	buf := bytes.NewBuffer([]byte{})
@@ -98,15 +98,15 @@ func (f Frame) Bytes() []byte {
 		f.Src.last = true
 	}
 
-	buf.Write(f.Dst.Bytes()) // Destination Address
-	buf.Write(f.Src.Bytes()) // Source Address
+	buf.Write(f.Dst.Bytes()) // Destination address
+	buf.Write(f.Src.Bytes()) // Source address
 	// Path (optional)
 	for _, a := range f.Path {
 		buf.Write(a.Bytes())
 	}
-	buf.WriteByte(uiFrame)    // Control Field (always UI-frame)
+	buf.WriteByte(uiFrame)    // Control field (always UI-frame)
 	buf.WriteByte(protocolID) // Protocol ID (always no layer 3 protocol)
-	buf.WriteString(f.Text)   // Information Field
+	buf.WriteString(f.Text)   // Information field
 
 	return buf.Bytes()
 }
@@ -127,7 +127,7 @@ func (f *Frame) FromBytes(frame []byte) error {
 				return ErrFrameNoLast
 			}
 
-			a := Address{}
+			a := Addr{}
 			err := a.FromBytes(frame[i : i+7])
 			if err != nil {
 				return err
@@ -157,7 +157,7 @@ func (f *Frame) FromBytes(frame []byte) error {
 		return ErrFrameBadProto
 	}
 
-	f.Text = string(frame[i+2:]) // Information Field
+	f.Text = string(frame[i+2:]) // Information field
 
 	return nil
 }

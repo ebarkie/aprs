@@ -43,17 +43,17 @@ GenPass generates a verification passcode for the given station.
 #### func  RecvIS
 
 ```go
-func RecvIS(ctx context.Context, dial string, user Address, pass int, filters ...string) <-chan Frame
+func RecvIS(ctx context.Context, dial string, user Addr, pass int, filters ...string) <-chan Frame
 ```
 RecvIS receives APRS-IS frames over tcp from the specified server. Filter(s) are
 optional and use the following syntax:
 
 http://www.aprs-is.net/javAPRSFilter.aspx
 
-#### type Address
+#### type Addr
 
 ```go
-type Address struct {
+type Addr struct {
 	SSID     int
 	Repeated bool
 
@@ -61,42 +61,42 @@ type Address struct {
 }
 ```
 
-Address represents an APRS callsign, SSID, and associated metadata.
+Addr represents an APRS callsign, SSID, and associated metadata.
 
-#### func (Address) Bytes
-
-```go
-func (a Address) Bytes() []byte
-```
-Bytes returns the Address in AX.25 byte format.
-
-#### func (*Address) FromBytes
+#### func (Addr) Bytes
 
 ```go
-func (a *Address) FromBytes(addr []byte) error
+func (a Addr) Bytes() []byte
 ```
-FromBytes sets the Address from an AX.25 byte slice.
+Bytes returns the address in AX.25 byte format.
 
-#### func (*Address) FromString
+#### func (*Addr) FromBytes
 
 ```go
-func (a *Address) FromString(addr string) (err error)
+func (a *Addr) FromBytes(addr []byte) error
 ```
-FromString sets the Address from a string.
+FromBytes sets the address from an AX.25 byte slice.
 
-#### func (Address) String
+#### func (*Addr) FromString
 
 ```go
-func (a Address) String() (addr string)
+func (a *Addr) FromString(addr string) (err error)
 ```
-String returns the Address as a TNC2 formatted string.
+FromString sets the address from a string.
+
+#### func (Addr) String
+
+```go
+func (a Addr) String() (addr string)
+```
+String returns the address as a TNC2 formatted string.
 
 #### type Frame
 
 ```go
 type Frame struct {
-	Dst  Address
-	Src  Address
+	Dst  Addr
+	Src  Addr
 	Path Path
 	Text string
 }
@@ -184,7 +184,7 @@ sending to APRS-IS servers.
 #### type Path
 
 ```go
-type Path []Address
+type Path []Addr
 ```
 
 Path represents the APRS digipath.

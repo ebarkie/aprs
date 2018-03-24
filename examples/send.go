@@ -21,9 +21,9 @@ func main() {
 	w.WindSpeed = 5
 
 	f := aprs.Frame{
-		Dst:  aprs.Address{Call: "APRS"},
-		Src:  aprs.Address{Call: "aWnnnn"},
-		Path: aprs.Path{aprs.Address{Call: "TCPIP", Repeated: true}},
+		Dst:  aprs.Addr{Call: "APRS"},
+		Src:  aprs.Addr{Call: "aWnnnn"},
+		Path: aprs.Path{aprs.Addr{Call: "TCPIP", Repeated: true}},
 		Text: w.String(),
 	}
 	err := f.SendIS("tcp://cwop.aprs.net:14580", -1)

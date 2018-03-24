@@ -13,8 +13,8 @@ import (
 	"strings"
 )
 
-// String returns the Address as a TNC2 formatted string.
-func (a Address) String() (addr string) {
+// String returns the address as a TNC2 formatted string.
+func (a Addr) String() (addr string) {
 	addr = a.Call
 	if a.SSID > 0 {
 		addr += fmt.Sprintf("-%d", a.SSID)
@@ -64,13 +64,13 @@ func (f *Frame) FromString(frame string) (err error) {
 // String returns the Frame as a TNC2 formatted string.  This is
 // suitable for sending to APRS-IS servers.
 func (f Frame) String() (frame string) {
-	// We have to manipulate the Addresses a little because only
+	// We have to manipulate the addresses a little because only
 	// the last repeated address should have an asterisk.
 
-	// Destination and Source Addresses
+	// Destination and source addresses
 	frame = fmt.Sprintf("%s>%s",
-		Address{Call: f.Src.Call, SSID: f.Src.SSID},
-		Address{Call: f.Dst.Call, SSID: f.Dst.SSID})
+		Addr{Call: f.Src.Call, SSID: f.Src.SSID},
+		Addr{Call: f.Dst.Call, SSID: f.Dst.SSID})
 	// Path (optional)
 	for i := 0; i < len(f.Path); i++ {
 		a := f.Path[i]

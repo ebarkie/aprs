@@ -10,22 +10,22 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestAddressFromString(t *testing.T) {
+func TestAddrFromString(t *testing.T) {
 	a := assert.New(t)
 
-	addr := Address{}
+	addr := Addr{}
 	err := addr.FromString("N0CALL-13")
 	a.Nil(err, "Valid from string")
 	a.Equal("N0CALL", addr.Call, "Call")
 	a.Equal(13, addr.SSID, "SSID")
 
-	addr = Address{}
+	addr = Addr{}
 	err = addr.FromString("N0NE")
 	a.Nil(err, "Valid from string")
 	a.Equal("N0NE", addr.Call, "Call")
 	a.Equal(0, addr.SSID, "SSID")
 
-	addr = Address{}
+	addr = Addr{}
 	err = addr.FromString("N0CALLS")
 	a.NotNil(err, "Invalid from string")
 }

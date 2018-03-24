@@ -111,9 +111,9 @@ func TestFrameFromBytes(t *testing.T) {
 
 func TestFrameToBytes(t *testing.T) {
 	f := Frame{}
-	f.Src = Address{Call: "N4MTT", SSID: 2}
-	f.Dst = Address{Call: "APX209", Repeated: true}
-	f.Path = []Address{{Call: "KD4PBS", SSID: 3, Repeated: true}, {Call: "WIDE2", SSID: 2}}
+	f.Src = Addr{Call: "N4MTT", SSID: 2}
+	f.Dst = Addr{Call: "APX209", Repeated: true}
+	f.Path = []Addr{{Call: "KD4PBS", SSID: 3, Repeated: true}, {Call: "WIDE2", SSID: 2}}
 	f.Text = "@270055z3548.41N/07846.35W_360/000g000t066r000P000p000h63b10183XU2k\r"
 
 	a := assert.New(t)

@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-func genLogin(user Address, pass int) string {
+func genLogin(user Addr, pass int) string {
 	return fmt.Sprintf("user %s pass %d vers %s %s", user, pass, SwName, SwVers)
 }
 
@@ -57,7 +57,7 @@ func GenPass(call string) (pass uint16) {
 // Filter(s) are optional and use the following syntax:
 //
 // http://www.aprs-is.net/javAPRSFilter.aspx
-func RecvIS(ctx context.Context, dial string, user Address, pass int, filters ...string) <-chan Frame {
+func RecvIS(ctx context.Context, dial string, user Addr, pass int, filters ...string) <-chan Frame {
 	fc := make(chan Frame)
 
 	go func() {

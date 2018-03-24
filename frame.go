@@ -12,15 +12,15 @@ import (
 
 // Frame represents a complete APRS frame.
 type Frame struct {
-	Dst  Address
-	Src  Address
+	Dst  Addr
+	Src  Addr
 	Path Path
 	Text string
 }
 
-// Address represents an APRS callsign, SSID, and associated
+// Addr represents an APRS callsign, SSID, and associated
 // metadata.
-type Address struct {
+type Addr struct {
 	SSID     int
 	Repeated bool
 	last     bool
@@ -28,10 +28,10 @@ type Address struct {
 }
 
 // Path represents the APRS digipath.
-type Path []Address
+type Path []Addr
 
-// FromString sets the Address from a string.
-func (a *Address) FromString(addr string) (err error) {
+// FromString sets the address from a string.
+func (a *Addr) FromString(addr string) (err error) {
 	if strings.HasSuffix(addr, "*") {
 		a.Repeated = true
 		addr = addr[:len(addr)-1]
@@ -65,7 +65,7 @@ func (a *Address) FromString(addr string) (err error) {
 // addresses.
 func (p *Path) FromString(path string) (err error) {
 	for _, as := range strings.Split(path, ",") {
-		a := Address{}
+		a := Addr{}
 		err = a.FromString(as)
 		if err != nil {
 			return

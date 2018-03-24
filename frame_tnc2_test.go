@@ -9,8 +9,8 @@ import (
 	"testing"
 )
 
-func ExampleAddress_String() {
-	a := Address{Call: "N0CALL", SSID: 13}
+func ExampleAddr_String() {
+	a := Addr{Call: "N0CALL", SSID: 13}
 	fmt.Println(a)
 
 	// Output:
