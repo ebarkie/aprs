@@ -4,6 +4,6 @@ go:
 env:
   - GO111MODULE=on
 install:
-  - go get -v $(go list ./... | grep -v /examples)
+  - go mod download
 script:
   - go test -race -v $(go list ./... | grep -v /examples)
