@@ -6,5 +6,4 @@ env:
 install:
   - go get -v $(go list ./... | grep -v /examples)
 script:
-  - go vet $(go list ./... | grep -v /examples)
   - go test -race -v $(go list ./... | grep -v /examples)
