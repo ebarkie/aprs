@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/ebarkie/aprs"
+	"gitlab.com/ebarkie/aprs"
 )
 
 func main() {

@@ -1,7 +1,7 @@
 # aprs
 
 ```go
-import "github.com/ebarkie/aprs"
+import "gitlab.com/ebarkie/aprs"
 ```
 
 Package aprs works with APRS string and byte packets. It can upload those

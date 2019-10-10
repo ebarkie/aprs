@@ -1,8 +1,5 @@
 # APRS
 
-[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](http://choosealicense.com/licenses/mit/)
-[![Build Status](https://travis-ci.org/ebarkie/aprs.svg?branch=master)](https://travis-ci.org/ebarkie/aprs)
-
 Go package for working with APRS string and byte packets.  It can upload those
 packets via APRS-IS or transmit them via TNC KISS.
 
@@ -11,7 +8,7 @@ It fully supports creating weather observations for [Citizen Weather Observer Pr
 ## Installation
 
 ```
-$ go get github.com/ebarkie/aprs
+$ go get gitlab.com/ebarkie/aprs
 ```
 
 ## Usage
@@ -26,7 +23,7 @@ package main
 import (
 	"log"
 
-	"github.com/ebarkie/aprs"
+	"gitlab.com/ebarkie/aprs"
 )
 
 func main() {

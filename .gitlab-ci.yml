@@ -1,0 +1,6 @@
+include:
+  remote: 'https://gitlab.com/ebarkie/gitlab-ci/raw/master/go.yml'
+
+stages:
+  - setup
+  - test
