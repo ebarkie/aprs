@@ -9,7 +9,7 @@ import (
 	"math"
 	"time"
 
-	"gitlab.com/ebarkie/weatherlink/units"
+	"github.com/ebarkie/weatherlink/units"
 )
 
 // Wx represents a weather station observation.

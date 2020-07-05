@@ -8,7 +8,7 @@ It fully supports creating weather observations for [Citizen Weather Observer Pr
 ## Installation
 
 ```
-$ go get gitlab.com/ebarkie/aprs
+$ go get github.com/ebarkie/aprs
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ package main
 import (
 	"log"
 
-	"gitlab.com/ebarkie/aprs"
+	"github.com/ebarkie/aprs"
 )
 
 func main() {

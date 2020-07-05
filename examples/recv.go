@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"gitlab.com/ebarkie/aprs"
+	"github.com/ebarkie/aprs"
 )
 
 func main() {

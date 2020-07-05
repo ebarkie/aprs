@@ -1,0 +1,23 @@
+name: Push
+
+on:
+  push:
+    branches:
+      - '*'
+
+jobs:
+  build:
+    name: Build
+
+    runs-on: ubuntu-latest
+
+    env:
+      GOOS: linux
+      GOARCH: amd64
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Run Go 1.14 pipeline
+        uses: ebarkie/actions/go/1.14@v1

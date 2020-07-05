@@ -1,8 +1,8 @@
-module gitlab.com/ebarkie/aprs
+module github.com/ebarkie/aprs
 
 require (
+	github.com/ebarkie/weatherlink v1.0.2
 	github.com/stretchr/testify v1.2.2
-	gitlab.com/ebarkie/weatherlink v1.0.1
 )
 
-go 1.13
+go 1.14
