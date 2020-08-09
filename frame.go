@@ -42,7 +42,7 @@ func (a *Addr) FromString(addr string) (err error) {
 		a.Call = addr[:dash]
 		a.SSID, err = strconv.Atoi(addr[dash+1:])
 		if err != nil {
-			err = fmt.Errorf("Address error: SSID is invalid: %s", err.Error())
+			err = fmt.Errorf("address error: SSID is invalid: %s", err.Error())
 			return
 		}
 	} else {
@@ -50,11 +50,11 @@ func (a *Addr) FromString(addr string) (err error) {
 	}
 
 	if len(a.Call) > 6 {
-		err = fmt.Errorf("Address error: Callsign length %d > 6", len(a.Call))
+		err = fmt.Errorf("address error: Callsign length %d > 6", len(a.Call))
 		return
 	}
 	if a.SSID < 0 || a.SSID > 15 {
-		err = fmt.Errorf("Address error: %d not > 0 & < 15", a.SSID)
+		err = fmt.Errorf("address error: %d not > 0 & < 15", a.SSID)
 		return
 	}
 

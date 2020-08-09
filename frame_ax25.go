@@ -52,7 +52,7 @@ func (a Addr) Bytes() []byte {
 // FromBytes sets the address from an AX.25 byte slice.
 func (a *Addr) FromBytes(addr []byte) error {
 	if len(addr) != 7 {
-		return fmt.Errorf("Address error: size mismatch %d != 7-bytes", len(addr))
+		return fmt.Errorf("address error: size mismatch %d != 7-bytes", len(addr))
 	}
 
 	// Convert call from 7-bit encoding back to 8-bit

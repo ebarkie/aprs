@@ -10,14 +10,14 @@ import "errors"
 
 // Errors.
 var (
-	ErrCallNotVerified = errors.New("Callsign not verified")
-	ErrFrameBadControl = errors.New("Frame Control Field not UI-frame")
-	ErrFrameBadProto   = errors.New("Frame Protocol ID not no layer 3 protocol")
-	ErrFrameIncomplete = errors.New("Frame incomplete")
-	ErrFrameInvalid    = errors.New("Frame is invalid")
-	ErrFrameNoLast     = errors.New("Frame incomplete or last path not set")
-	ErrFrameShort      = errors.New("Frame too short (16-bytes minimum)")
-	ErrProtoScheme     = errors.New("Protocol scheme is unknown")
+	ErrCallNotVerified = errors.New("callsign not verified")
+	ErrFrameBadControl = errors.New("frame Control Field not UI-frame")
+	ErrFrameBadProto   = errors.New("frame Protocol ID not no layer 3 protocol")
+	ErrFrameIncomplete = errors.New("frame incomplete")
+	ErrFrameInvalid    = errors.New("frame is invalid")
+	ErrFrameNoLast     = errors.New("frame incomplete or last path not set")
+	ErrFrameShort      = errors.New("frame too short (16-bytes minimum)")
+	ErrProtoScheme     = errors.New("protocol scheme is unknown")
 )
 
 // SwName is the default software name.
