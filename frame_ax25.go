@@ -59,7 +59,7 @@ func (a *Addr) FromBytes(addr []byte) error {
 	for i := 0; i < 6; i++ {
 		a.Call += string(addr[i] >> 1)
 	}
-	a.Call = strings.Replace(a.Call, " ", "", -1)
+	a.Call = strings.ReplaceAll(a.Call, " ", "")
 
 	// The last byte has the following bit breakdown:
 	//
