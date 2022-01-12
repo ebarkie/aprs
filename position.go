@@ -50,7 +50,7 @@ func (p *PositionReport) Bytes() []byte {
 
 	// render the Freq if it exists
 	if p.Freq != nil {
-		out = append(out, p.renderFreq()...)
+		out = append(out, []byte(p.renderFreq())...)
 	}
 
 	// render altitude if it exists
