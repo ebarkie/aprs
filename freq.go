@@ -20,9 +20,9 @@ type Freq struct {
 }
 
 // Render renders the frequency struct into a byte-slice
-func (f *Freq) Render() []byte {
+func (f *Freq) Render() string {
 	// set the frequency
-	out := []byte(fmt.Sprintf("%07.03fMHz ", f.Mhz))
+	out := fmt.Sprintf("%07.03fMHz ", f.Mhz)
 
 	// check for a tone
 	if f.Tone > 0 {
@@ -30,7 +30,7 @@ func (f *Freq) Render() []byte {
 		if f.Narrow {
 			t = "t"
 		}
-		out = append(out, []byte(fmt.Sprintf("%s%s ", t, z3p(f.Tone)))...)
+		out = fmt.Sprintf("%s%s%s ", out, t, z3p(f.Tone))
 	}
 
 	// check for CTCSS
@@ -39,7 +39,7 @@ func (f *Freq) Render() []byte {
 		if f.Narrow {
 			c = "c"
 		}
-		out = append(out, []byte(fmt.Sprintf("%s%s ", c, z3p(f.CTCSS)))...)
+		out = fmt.Sprintf("%s%s%s ", out, c, z3p(f.CTCSS))
 	}
 
 	// check for  DCS
@@ -48,17 +48,17 @@ func (f *Freq) Render() []byte {
 		if f.Narrow {
 			d = "d"
 		}
-		out = append(out, []byte(fmt.Sprintf("%s%s ", d, z3p(f.DCS)))...)
+		out = fmt.Sprintf("%s%s%s ", out, d, z3p(f.DCS))
 	}
 
 	// check for offset
 	if f.Offset != 0 {
-		out = append(out, []byte(fmt.Sprintf("%s ", z3p(f.Offset)))...)
+		out = fmt.Sprintf("%s%s ", out, z3p(f.Offset))
 	}
 
 	// check range
 	if f.Range != 0 {
-		out = append(out, []byte(fmt.Sprintf("R%sm ", z3p(f.Range)))...)
+		out = fmt.Sprintf("%sR%sm ", out, z3p(f.Range))
 	}
 	return out
 }
