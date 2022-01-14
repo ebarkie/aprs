@@ -53,8 +53,11 @@ func (p *PositionReport) String() string {
 	// add any other comments
 	out = out + p.Comment
 
-	// truncate to the size of the ui frame and return
-	return out[:255]
+	if len(out) > 255 {
+		// truncate to the size of the ui frame and return
+		return out[:255]
+	}
+	return out
 }
 
 // renderDataType returns the report Data-type (based on timestamp and messaging setting)
