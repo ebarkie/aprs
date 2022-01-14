@@ -11,11 +11,11 @@ type PositionReport struct {
 	Lat            float64   // latitude
 	Lon            float64   // longitude
 	Altitude       int
-	Symbol         []string // 2 byte Map symbol; see Chapter 20 aprs101
-	Extn           string   // 7+ byte Data Extension field. See Chapter 7 pg27 aprs101
-	Freq           *Freq    // freqspec compatible Frequency report
-	Comment        string   // free-form comment
-	MessageCapable bool     // Stations without APRS messaging capability are typically stand-alone trackers or digipeaters.
+	Symbol         string // 2 byte Map symbol; see Chapter 20 aprs101
+	Extn           string // 7+ byte Data Extension field. See Chapter 7 pg27 aprs101
+	Freq           *Freq  // freqspec compatible Frequency report
+	Comment        string // free-form comment
+	MessageCapable bool   // Stations without APRS messaging capability are typically stand-alone trackers or digipeaters.
 }
 
 // String returns a rendered position report suitable for sending to a TNC
@@ -86,9 +86,9 @@ func (p *PositionReport) renderCoords() string {
 
 	return fmt.Sprintf("%02.0f%05.2f%s%s%03.0f%05.2f%s%s",
 		latDeg, latMin, latHem,
-		p.Symbol[0],
+		string(p.Symbol[0]),
 		lonDeg, lonMin, lonHem,
-		p.Symbol[1])
+		string(p.Symbol[1]))
 }
 
 // renderFreq returns the rendered freqspec compatible Frequency
@@ -123,7 +123,7 @@ func (p *PositionReport) CSExtension(course, speed, bearing, nrq int) {
 	if bearing+nrq > 0 {
 		// if Direction-finding data is included, hard-code the map-symbol to DF
 		// aprs 101, pg 34; df reports
-		p.Symbol = []string{`/`, `\`}
+		p.Symbol = `/\`
 		p.Extn = fmt.Sprintf("%s/%s/%s/%s",
 			z3p(course),
 			z3p(speed),
@@ -174,7 +174,7 @@ func (p *PositionReport) DFSExtension(str, gain, dir int, height byte) {
 	//| Gain        | 0    | 1    | 2   | 3     | 4    | 5     | 6    | 7     | 8    | 9    | dB       |
 	//| Directivity | omni | 45NE | 90E | 135SE | 180S | 225SW | 270W | 315NW | 360N |      | deg      |
 	//+-------------+------+------+-----+-------+------+-------+------+-------+------+------+----------+
-	p.Symbol = []string{`/`, `\`}
+	p.Symbol = `/\`
 	p.Extn = fmt.Sprintf("DFS%d%s%d%d",
 		max(9, str),
 		string(height),

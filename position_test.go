@@ -80,7 +80,7 @@ func TestRenderCoords(t *testing.T) {
 			pr: &PositionReport{
 				Lat:    44.1083775,
 				Lon:    -107.9386725,
-				Symbol: []string{`/`, `j`},
+				Symbol: `/j`,
 			},
 			want: `4406.50N/10756.32Wj`,
 		},
@@ -89,7 +89,7 @@ func TestRenderCoords(t *testing.T) {
 			pr: &PositionReport{
 				Lat:    -46.071795,
 				Lon:    169.6652273,
-				Symbol: []string{`\`, `#`},
+				Symbol: `\#`,
 			},
 			want: `4604.31S\16939.91E#`,
 		},

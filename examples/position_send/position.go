@@ -11,7 +11,7 @@ func main() {
 	p := aprs.PositionReport{ // create a position report
 		Lat:    35.7,
 		Lon:    -78.7,
-		Symbol: []string{`\`, `j`}, // symbol for a jeep
+		Symbol: `\j`, // symbol for a jeep
 		Freq: &aprs.Freq{ // add a frequency report (optional)
 			Mhz: 146.52, // I am listening on US 2m simplex
 		},
