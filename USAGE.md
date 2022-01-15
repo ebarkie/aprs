@@ -181,6 +181,30 @@ func (f Frame) String() (frame string)
 String returns the Frame as a TNC2 formatted string. This is suitable for
 sending to APRS-IS servers.
 
+#### type Freq
+
+```go
+type Freq struct {
+	Mhz    float64 // Frequency in Mhz
+	Tone   int     // Tone in hz
+	CTCSS  int     // ctcss (mutually exclusive with tone and dcs)
+	DCS    int     // dcs (mutually exclusive with tone and ctcss)
+	Offset int     // +/- offset in mhz
+	Range  int     // range in miles
+	Narrow bool    // defaults to false for wideband
+}
+```
+
+Freq contains an APRS FreqSpec frequency report
+http://www.aprs.org/info/freqspec.txt
+
+#### func (*Freq) Render
+
+```go
+func (f *Freq) Render() string
+```
+Render renders the frequency struct into a byte-slice
+
 #### type Path
 
 ```go
@@ -195,6 +219,66 @@ Path represents the APRS digipath.
 func (p *Path) FromString(path string) (err error)
 ```
 FromString sets the Path from a string of comma separated addresses.
+
+#### type PositionReport
+
+```go
+type PositionReport struct {
+	Timestamp      time.Time // NOTE: Position reports are NOT expected to contain a timestamp unless the report refers to "old" (not real-time) data.
+	Lat            float64   // latitude
+	Lon            float64   // longitude
+	Altitude       int
+	Symbol         string // 2 byte Map symbol; see Chapter 20 aprs101
+	Extn           string // 7+ byte Data Extension field. See Chapter 7 pg27 aprs101
+	Freq           *Freq  // freqspec compatible Frequency report
+	Comment        string // free-form comment
+	MessageCapable bool   // Stations without APRS messaging capability are typically stand-alone trackers or digipeaters.
+}
+```
+
+PositionReport wraps all necessary metadata for a position report
+
+#### func (*PositionReport) CSExtension
+
+```go
+func (p *PositionReport) CSExtension(course, speed, bearing, nrq int)
+```
+CSExtension sets a course/speed data-extension block in the report
+
+#### func (*PositionReport) DFSExtension
+
+```go
+func (p *PositionReport) DFSExtension(str, gain, dir int, height byte)
+```
+DFSExtension sets a Direction-finding data-extension block
+
+#### func (*PositionReport) DSExtension
+
+```go
+func (p *PositionReport) DSExtension(direction, speed int)
+```
+DSExtension Extension sets a wind direction/speed data-extension block
+
+#### func (*PositionReport) PHGExtension
+
+```go
+func (p *PositionReport) PHGExtension(power, gain, dir int, height byte)
+```
+PHGExtension sets a power/height/gain data-extension block
+
+#### func (*PositionReport) RNGExtension
+
+```go
+func (p *PositionReport) RNGExtension(miles int)
+```
+RNGExtension sets a pre-computed range data-extension block
+
+#### func (*PositionReport) String
+
+```go
+func (p *PositionReport) String() string
+```
+String returns a rendered position report suitable for sending to a TNC
 
 #### type Wx
 
