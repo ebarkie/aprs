@@ -79,7 +79,7 @@ func (w Wx) String() (s string) {
 	// Base prefix
 	latDeg, latMin, latHem := decToDMS(w.Lat, [2]string{"N", "S"})
 	lonDeg, lonMin, lonHem := decToDMS(w.Lon, [2]string{"E", "W"})
-	s = fmt.Sprintf("@%sz%02.0f%02.2f%s/%03.0f%02.2f%s",
+	s = fmt.Sprintf("@%sz%02.0f%05.2f%s/%03.0f%05.2f%s",
 		w.Timestamp.In(time.UTC).Format("021504"),
 		latDeg, latMin, latHem,
 		lonDeg, lonMin, lonHem)
