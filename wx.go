@@ -6,7 +6,6 @@ package aprs
 
 import (
 	"fmt"
-	"math"
 	"time"
 
 	"github.com/ebarkie/weatherlink/units"
@@ -46,18 +45,6 @@ func (w *Wx) Zero() {
 	w.WindDir = -1
 	w.WindGust = -1
 	w.WindSpeed = -1
-}
-
-// decToDMS takes a float latitude or longitude and converts it to
-// degrees, minutes (second as decimal), and a hemisphere string.
-func decToDMS(l float64, hems [2]string) (float64, float64, string) {
-	deg, frac := math.Modf(math.Abs(l))
-	min := frac * 60.0
-
-	if l < 0 {
-		return deg, min, hems[1]
-	}
-	return deg, min, hems[0]
 }
 
 // String returns an APRS packet for the provided measurements.
