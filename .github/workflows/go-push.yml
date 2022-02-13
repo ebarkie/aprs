@@ -19,5 +19,5 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
 
-      - name: Run Go 1.16 pipeline
-        uses: ebarkie/actions/go/1.16@master
+      - name: Run Go 1.17 pipeline
+        uses: ebarkie/actions/go/1.17@master
