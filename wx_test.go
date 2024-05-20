@@ -33,10 +33,10 @@ func ExampleWx_String() {
 	// @052035z3542.00N/07842.00W_.../...g...t...r...p...P...h..b.....GoTst9-Stn
 }
 
-func ExampleWx_String_altimeter() {
+func ExampleWx_String_pressure() {
 	w := testWx
 
-	w.Altimeter = 29.87
+	w.Pressure = 29.87
 	fmt.Println(w)
 
 	// Output:

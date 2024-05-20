@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/ebarkie/aprs"
+	"github.com/acobaugh/aprs"
 )
 
 func main() {
@@ -12,7 +12,7 @@ func main() {
 		Lon:  -78.7,
 		Type: "DvsVP2+",
 	}
-	w.Altimeter = 29.70
+	w.Pressure = 29.70
 	w.Humidity = 90
 	w.RainLastHour = 0.0
 	w.RainLast24Hours = 0.10

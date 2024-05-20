@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/ebarkie/aprs"
+	"github.com/acobaugh/aprs"
 )
 
 // N0CALL-13>APZ001,WIDE1-1,WIDE2-1:!3542.00N\07842.00Wj146.520MHz Flat tire; Send beer!
