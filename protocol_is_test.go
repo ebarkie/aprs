@@ -14,3 +14,8 @@ func TestGenPass(t *testing.T) {
 	p := GenPass("N0CALL")
 	assert.Equal(t, 13023, int(p), "Passcode mismatch")
 }
+
+func TestGenPassOdd(t *testing.T) {
+	p := GenPass("N0CAL")
+	assert.Equal(t, 12947, int(p), "Passcode mismatch")
+}
