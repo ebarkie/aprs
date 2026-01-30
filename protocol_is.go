@@ -45,7 +45,9 @@ func GenPass(call string) (pass uint16) {
 	pass = 0x73e2 // The key/seed.
 	for i := 0; i < len(c); i += 2 {
 		pass ^= uint16(c[i]) << 8
-		pass ^= uint16(c[i+1])
+		if i+1 < len(c) {
+			pass ^= uint16(c[i+1])
+		}
 	}
 
 	// Mask off the high bit so number is always positive
