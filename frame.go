@@ -54,7 +54,7 @@ func (a *Addr) FromString(addr string) (err error) {
 		return
 	}
 	if a.SSID < 0 || a.SSID > 15 {
-		err = fmt.Errorf("address error: %d not > 0 & < 15", a.SSID)
+		err = fmt.Errorf("address error: SSID %d not in range 0-15", a.SSID)
 		return
 	}
 
