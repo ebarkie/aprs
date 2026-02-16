@@ -147,7 +147,7 @@ func TestExtensions(t *testing.T) {
 			op: func(p *PositionReport) {
 				p.CSExtension(360, 50, 180, 9)
 			},
-			want: "360/050",
+			want: "360/050/180/009",
 		},
 		{
 			name: "DS-Extension",

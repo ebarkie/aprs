@@ -120,19 +120,13 @@ func (p *PositionReport) renderAltitude() string {
 
 // CSExtension sets a course/speed data-extension block in the report
 func (p *PositionReport) CSExtension(course, speed, bearing, nrq int) {
+	p.Extn = fmt.Sprintf("%s/%s", z3p(course), z3p(speed))
 	if bearing+nrq > 0 {
 		// if Direction-finding data is included, hard-code the map-symbol to DF
 		// aprs 101, pg 34; df reports
 		p.Symbol = `/\`
-		p.Extn = fmt.Sprintf("%s/%s/%s/%s",
-			z3p(course),
-			z3p(speed),
-			z3p(bearing),
-			z3p(nrq))
+		p.Extn += fmt.Sprintf("/%s/%s", z3p(bearing), z3p(nrq))
 	}
-	p.Extn = fmt.Sprintf("%s/%s",
-		z3p(course),
-		z3p(speed))
 }
 
 // DSExtension Extension sets a wind direction/speed data-extension block
