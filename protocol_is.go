@@ -20,16 +20,6 @@ func genLogin(user Addr, pass int) string {
 	return fmt.Sprintf("user %s pass %d vers %s %s", user, pass, SwName, SwVers)
 }
 
-func readLine(conn net.Conn, d time.Duration) (string, error) {
-	if d > 0 {
-		conn.SetReadDeadline(time.Now().Add(d))
-	} else {
-		conn.SetReadDeadline(time.Time{})
-	}
-	s, err := bufio.NewReader(conn).ReadString('\n')
-	return strings.TrimSpace(s), err
-}
-
 // GenPass generates a verification passcode for the given station.
 func GenPass(call string) (pass uint16) {
 	// Refer to aprsc:
@@ -70,10 +60,11 @@ func RecvIS(ctx context.Context, dial string, user Addr, pass int, filters ...st
 			return
 		}
 		defer conn.Close()
+		r := bufio.NewReader(conn)
 
 		// Read welcome banner
-		_, err = readLine(conn, 5*time.Second)
-		if err != nil {
+		conn.SetReadDeadline(time.Now().Add(5 * time.Second))
+		if _, err = r.ReadString('\n'); err != nil {
 			return
 		}
 
@@ -82,14 +73,13 @@ func RecvIS(ctx context.Context, dial string, user Addr, pass int, filters ...st
 		if len(filters) > 0 {
 			login += " filter " + strings.Join(filters, " ")
 		}
-		_, err = fmt.Fprintf(conn, "%s\r\n", login)
-		if err != nil {
+		if _, err = fmt.Fprintf(conn, "%s\r\n", login); err != nil {
 			return
 		}
 		// # logresp CWxxxx unverified, server CWOP-7
 		// # logresp CWxxxx unverified, server THIRD
-		_, err = readLine(conn, 5*time.Second)
-		if err != nil {
+		conn.SetReadDeadline(time.Now().Add(5 * time.Second))
+		if _, err = r.ReadString('\n'); err != nil {
 			return
 		}
 
@@ -106,10 +96,12 @@ func RecvIS(ctx context.Context, dial string, user Addr, pass int, filters ...st
 			// Heartbeats come across every 20 seconds so that's the
 			// longest the read should block.  It's also the longest
 			// it would take for a context cancel to be processed.
-			s, err = readLine(conn, 30*time.Second)
+			conn.SetReadDeadline(time.Now().Add(30 * time.Second))
+			s, err = r.ReadString('\n')
 			if err != nil {
 				return
 			}
+			s = strings.TrimSpace(s)
 
 			// # aprsc 2.1.4-g408ed49 26 Aug 2017 16:49:48 GMT FIFTH 44.74.128.25:14580
 			if !strings.HasPrefix(s, "#") {
@@ -220,22 +212,21 @@ func (f Frame) SendTCP(dial string, pass int) (err error) {
 		return
 	}
 	defer conn.Close()
+	r := bufio.NewReader(conn)
+	conn.SetReadDeadline(time.Now().Add(5 * time.Second))
 
 	// Read welcome banner
-	_, err = readLine(conn, 5*time.Second)
-	if err != nil {
+	if _, err = r.ReadString('\n'); err != nil {
 		return
 	}
 
 	// Login
-	_, err = fmt.Fprintf(conn, "%s\r\n", genLogin(f.Src, pass))
-	if err != nil {
+	if _, err = fmt.Fprintf(conn, "%s\r\n", genLogin(f.Src, pass)); err != nil {
 		return
 	}
 	// # logresp CWxxxx unverified, server CWOP-7
 	// # logresp CWxxxx unverified, server THIRD
-	_, err = readLine(conn, 5*time.Second)
-	if err != nil {
+	if _, err = r.ReadString('\n'); err != nil {
 		return
 	}
 
