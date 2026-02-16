@@ -129,6 +129,7 @@ func (f *Frame) FromBytes(frame []byte) error {
 	if err := f.Src.FromBytes(frame[7:14]); err != nil {
 		return err
 	}
+
 	i := 14
 
 	// Path (optional)
