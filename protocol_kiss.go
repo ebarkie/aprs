@@ -51,9 +51,13 @@ func (f Frame) SendKISS(dial string) (err error) {
 	}
 	defer conn.Close()
 
-	conn.Write([]byte{fend, cmdData | ((port & 0xf) << 4)})
-	conn.Write(kissEscape(f.Bytes()))
-	conn.Write([]byte{fend})
+	if _, err = conn.Write([]byte{fend, cmdData | ((port & 0xf) << 4)}); err != nil {
+		return
+	}
+	if _, err = conn.Write(kissEscape(f.Bytes())); err != nil {
+		return
+	}
+	_, err = conn.Write([]byte{fend})
 
 	return
 }
