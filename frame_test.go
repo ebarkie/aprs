@@ -34,4 +34,8 @@ func TestPathFromString(t *testing.T) {
 	p := Path{}
 	p.FromString("WIDE1-1,WIDE2-1")
 	assert.Equal(t, Path{{Call: "WIDE1", SSID: 1}, {Call: "WIDE2", SSID: 1}}, p, "Path")
+
+	p = Path{}
+	p.FromString("")
+	assert.Len(t, p, 0, "Empty path")
 }

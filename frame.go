@@ -64,6 +64,9 @@ func (a *Addr) FromString(addr string) (err error) {
 // FromString sets the Path from a string of comma separated
 // addresses.
 func (p *Path) FromString(path string) (err error) {
+	if path == "" {
+		return
+	}
 	for _, as := range strings.Split(path, ",") {
 		a := Addr{}
 		err = a.FromString(as)
