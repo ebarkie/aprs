@@ -90,19 +90,22 @@ func (f Frame) Bytes() []byte {
 
 	buf := bytes.NewBuffer([]byte{})
 
-	// If we have a path then set the last address as such,
-	// otherwise the source address is the last one.
-	if len(f.Path) > 0 {
-		f.Path[len(f.Path)-1].last = true
-	} else {
-		f.Src.last = true
-	}
-
 	buf.Write(f.Dst.Bytes()) // Destination address
-	buf.Write(f.Src.Bytes()) // Source address
-	// Path (optional)
-	for _, a := range f.Path {
-		buf.Write(a.Bytes())
+
+	// If we have a path then the last path address is the last
+	// one, otherwise the source address is.
+	if len(f.Path) > 0 {
+		buf.Write(f.Src.Bytes()) // Source address
+		for i, a := range f.Path {
+			if i == len(f.Path)-1 {
+				a.last = true
+			}
+			buf.Write(a.Bytes())
+		}
+	} else {
+		src := f.Src
+		src.last = true
+		buf.Write(src.Bytes()) // Source address (last)
 	}
 	buf.WriteByte(uiFrame)    // Control field (always UI-frame)
 	buf.WriteByte(protocolID) // Protocol ID (always no layer 3 protocol)
@@ -116,8 +119,16 @@ func (f *Frame) FromBytes(frame []byte) error {
 	if len(frame) < 16 {
 		return ErrFrameShort
 	}
-	f.Dst.FromBytes(frame[0:7])  // Destination address
-	f.Src.FromBytes(frame[7:14]) // Source address
+
+	// Destination address
+	if err := f.Dst.FromBytes(frame[0:7]); err != nil {
+		return err
+	}
+
+	// Source address
+	if err := f.Src.FromBytes(frame[7:14]); err != nil {
+		return err
+	}
 	i := 14
 
 	// Path (optional)

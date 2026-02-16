@@ -12,6 +12,7 @@ import (
 
 // KG4HIE>APK102,W4LBT-9,WIDE1,KD4PBS-3*,WIDE2:=3438.51N/07941.15W_120/001g004t073r   p   P000h  b     KU2k<0x0d>
 // U frame UI: p/f=0, No layer 3 protocol implemented., length = 105
+//
 //	dest    APK102  0 c/r=0 res=3 last=0
 //	source  KG4HIE  0 c/r=1 res=3 last=0
 //	digi 1  W4LBT   9   h=1 res=3 last=0
@@ -41,10 +42,11 @@ var ax25Wx1 = []byte{
 
 // N4MTT-2>APX209,KD4PBS-3*,WIDE2-2:@270055z3548.41N/07846.35W_360/000g000t066r000P000p000h63b10183XU2k<0x0d>
 // U frame UI: p/f=0, No layer 3 protocol implemented., length = 98
-//      dest    APX209  0 c/r=1 res=3 last=0
-//      source  N4MTT   2 c/r=0 res=3 last=0
-//      digi 1  KD4PBS  3   h=1 res=3 last=0
-//      digi 2  WIDE2   2   h=0 res=3 last=1
+//
+//	dest    APX209  0 c/r=1 res=3 last=0
+//	source  N4MTT   2 c/r=0 res=3 last=0
+//	digi 1  KD4PBS  3   h=1 res=3 last=0
+//	digi 2  WIDE2   2   h=0 res=3 last=1
 //
 // Weather Report, WEATHER Station (blue), Xastir
 // N 35 48.4100, W 078 46.3500
