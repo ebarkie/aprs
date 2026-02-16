@@ -70,7 +70,7 @@ var ax25Wx2 = []byte{
 func TestFrameFromBytesIncomplete(t *testing.T) {
 	// Incomplete frames should not crash.
 	for _, frame := range [][]byte{ax25Wx1, ax25Wx2} {
-		for i := 0; i < len(frame); i++ {
+		for i := range frame {
 			f := Frame{}
 			f.FromBytes(frame[0:i])
 		}

@@ -37,10 +37,10 @@ func (a *Addr) FromString(addr string) (err error) {
 		addr = addr[:len(addr)-1]
 	}
 
-	dash := strings.Index(addr, "-")
-	if dash > -1 {
-		a.Call = addr[:dash]
-		a.SSID, err = strconv.Atoi(addr[dash+1:])
+	before, after, ok := strings.Cut(addr, "-")
+	if ok {
+		a.Call = before
+		a.SSID, err = strconv.Atoi(after)
 		if err != nil {
 			err = fmt.Errorf("address error: SSID is invalid: %s", err.Error())
 			return
@@ -67,7 +67,7 @@ func (p *Path) FromString(path string) (err error) {
 	if path == "" {
 		return
 	}
-	for _, as := range strings.Split(path, ",") {
+	for as := range strings.SplitSeq(path, ",") {
 		a := Addr{}
 		err = a.FromString(as)
 		if err != nil {

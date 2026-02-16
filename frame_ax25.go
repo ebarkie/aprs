@@ -56,7 +56,7 @@ func (a *Addr) FromBytes(addr []byte) error {
 	}
 
 	// Convert call from 7-bit encoding back to 8-bit
-	for i := 0; i < 6; i++ {
+	for i := range 6 {
 		a.Call += string(addr[i] >> 1)
 	}
 	a.Call = strings.ReplaceAll(a.Call, " ", "")
