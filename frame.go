@@ -32,8 +32,8 @@ type Path []Addr
 
 // FromString sets the address from a string.
 func (a *Addr) FromString(addr string) (err error) {
-	if strings.HasSuffix(addr, "*") {
-		a.Repeated = true
+	a.Repeated = strings.HasSuffix(addr, "*")
+	if a.Repeated {
 		addr = addr[:len(addr)-1]
 	}
 
@@ -47,6 +47,7 @@ func (a *Addr) FromString(addr string) (err error) {
 		}
 	} else {
 		a.Call = addr
+		a.SSID = 0
 	}
 
 	if len(a.Call) > 6 {
@@ -64,6 +65,7 @@ func (a *Addr) FromString(addr string) (err error) {
 // FromString sets the Path from a string of comma separated
 // addresses.
 func (p *Path) FromString(path string) (err error) {
+	*p = (*p)[:0]
 	if path == "" {
 		return
 	}

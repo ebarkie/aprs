@@ -56,6 +56,7 @@ func (a *Addr) FromBytes(addr []byte) error {
 	}
 
 	// Convert call from 7-bit encoding back to 8-bit
+	a.Call = ""
 	for i := range 6 {
 		a.Call += string(addr[i] >> 1)
 	}
@@ -70,12 +71,8 @@ func (a *Addr) FromBytes(addr []byte) error {
 	//      0 = No   | 1        | 1        | 7-bit   | 0 = No
 	//      1 = Yes  |          |          |         | 1 = Yes
 	a.SSID = int(addr[6] & 0x1e >> 1)
-	if addr[6]&0x01 > 0 {
-		a.last = true
-	}
-	if addr[6]&0x80 > 0 {
-		a.Repeated = true
-	}
+	a.last = addr[6]&0x01 > 0
+	a.Repeated = addr[6]&0x80 > 0
 
 	return nil
 }
@@ -133,6 +130,7 @@ func (f *Frame) FromBytes(frame []byte) error {
 	i := 14
 
 	// Path (optional)
+	f.Path = f.Path[:0]
 	if !f.Src.last {
 		for {
 			if i+7 > len(frame) {
