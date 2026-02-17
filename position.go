@@ -44,7 +44,7 @@ func (p *PositionReport) String() string {
 	}
 
 	// render altitude if it exists
-	if p.Altitude > 0 {
+	if p.Altitude != 0 {
 		out += p.renderAltitude()
 	}
 
@@ -74,19 +74,24 @@ func (p *PositionReport) renderDataType() byte {
 
 // renderTimestamp returns the rendered timestamp from the position report
 func (p *PositionReport) renderTimestamp() string {
-	return fmt.Sprintf("%sz", p.Timestamp.Format("021504"))
+	return p.Timestamp.In(time.UTC).Format("021504z")
 }
 
 // renderCoords returns the rendered latitude and longitude from the position report
 func (p *PositionReport) renderCoords() string {
+	sym := p.Symbol
+	if len(sym) < 2 {
+		sym = "//" // default primary table, dot
+	}
+
 	latDeg, latMin, latHem := decToDMS(p.Lat, [2]string{"N", "S"})
 	lonDeg, lonMin, lonHem := decToDMS(p.Lon, [2]string{"E", "W"})
 
 	return fmt.Sprintf("%02.0f%05.2f%s%s%03.0f%05.2f%s%s",
 		latDeg, latMin, latHem,
-		string(p.Symbol[0]),
+		string(sym[0]),
 		lonDeg, lonMin, lonHem,
-		string(p.Symbol[1]))
+		string(sym[1]))
 }
 
 // renderFreq returns the rendered freqspec compatible Frequency
