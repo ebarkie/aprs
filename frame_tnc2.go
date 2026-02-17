@@ -13,6 +13,11 @@ import (
 	"strings"
 )
 
+var reFrame = regexp.MustCompile(func() string {
+	const reCall = "[[:alnum:]]{1,6}(?:-(?:[0-9]|1[0-5]))?"
+	return fmt.Sprintf("^(%[1]s)>(%[1]s)((?:(?:,)(?:%[1]s\\*?))*):(.*)", reCall)
+}())
+
 // String returns the address as a TNC2 formatted string.
 func (a Addr) String() (addr string) {
 	addr = a.Call
@@ -33,10 +38,7 @@ func (a Addr) String() (addr string) {
 // SSID's are not numeric values between 0 and 15.
 func (f *Frame) FromString(frame string) (err error) {
 	// SRC>DST[,PATH]:TEXT
-	const reCall = "[[:alnum:]]{1,6}(?:-(?:[0-9]|1[0-5]))?"
-	re := regexp.MustCompile(fmt.Sprintf("^(%[1]s)>(%[1]s)((?:(?:,)(?:%[1]s\\*?))*):(.*)", reCall))
-
-	matches := re.FindStringSubmatch(frame)
+	matches := reFrame.FindStringSubmatch(frame)
 	if matches == nil {
 		err = ErrFrameInvalid
 		return

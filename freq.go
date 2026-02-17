@@ -16,7 +16,7 @@ type Freq struct {
 	Narrow bool    // defaults to false for wideband
 }
 
-// Render renders the frequency struct into a byte-slice
+// Render renders the frequency struct into a string
 func (f *Freq) Render() string {
 	// set the frequency
 	out := fmt.Sprintf("%07.03fMHz ", f.Mhz)
@@ -27,7 +27,7 @@ func (f *Freq) Render() string {
 		if f.Narrow {
 			t = "t"
 		}
-		out = fmt.Sprintf("%s%s%s ", out, t, z3p(f.Tone))
+		out += t + z3p(f.Tone) + " "
 	}
 
 	// check for CTCSS
@@ -36,26 +36,26 @@ func (f *Freq) Render() string {
 		if f.Narrow {
 			c = "c"
 		}
-		out = fmt.Sprintf("%s%s%s ", out, c, z3p(f.CTCSS))
+		out += c + z3p(f.CTCSS) + " "
 	}
 
-	// check for  DCS
+	// check for DCS
 	if f.DCS > 0 {
 		d := "D"
 		if f.Narrow {
 			d = "d"
 		}
-		out = fmt.Sprintf("%s%s%s ", out, d, z3p(f.DCS))
+		out += d + z3p(f.DCS) + " "
 	}
 
 	// check for offset
 	if f.Offset != 0 {
-		out = fmt.Sprintf("%s%s ", out, z3p(f.Offset))
+		out += z3p(f.Offset) + " "
 	}
 
 	// check range
 	if f.Range != 0 {
-		out = fmt.Sprintf("%sR%sm ", out, z3p(f.Range))
+		out += "R" + z3p(f.Range) + "m "
 	}
 	return out
 }

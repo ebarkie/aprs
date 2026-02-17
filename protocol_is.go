@@ -27,9 +27,8 @@ func GenPass(call string) (pass uint16) {
 
 	// Upper case callsign and strip SSID if it was included
 	c := strings.ToUpper(call)
-	dash := strings.Index(c, "-")
-	if dash > -1 {
-		c = c[:dash]
+	if before, _, ok := strings.Cut(c, "-"); ok {
+		c = before
 	}
 
 	pass = 0x73e2 // The key/seed.

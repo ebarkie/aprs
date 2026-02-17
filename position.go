@@ -22,36 +22,34 @@ type PositionReport struct {
 func (p *PositionReport) String() string {
 	// Refer to APRS protocol reference 1.0
 	// Chapter 8: position and df report data formats
-	var out string
-
 	// render the data type
-	out = string(p.renderDataType())
+	out := string(p.renderDataType())
 
 	// render the timestamp
 	if !p.Timestamp.IsZero() {
-		out = out + p.renderTimestamp()
+		out += p.renderTimestamp()
 	}
 
 	// render the lat/long coords
-	out = out + p.renderCoords()
+	out += p.renderCoords()
 
 	// render the data extension block (must be at least 7 bytes)
 	if len(p.Extn) >= 7 {
-		out = out + p.Extn
+		out += p.Extn
 	}
 
 	// render the Freq if it exists
 	if p.Freq != nil {
-		out = out + p.renderFreq()
+		out += p.renderFreq()
 	}
 
 	// render altitude if it exists
 	if p.Altitude > 0 {
-		out = out + p.renderAltitude()
+		out += p.renderAltitude()
 	}
 
 	// add any other comments
-	out = out + p.Comment
+	out += p.Comment
 
 	if len(out) > 255 {
 		// truncate to the size of the ui frame and return
@@ -64,14 +62,14 @@ func (p *PositionReport) String() string {
 func (p *PositionReport) renderDataType() byte {
 	if p.MessageCapable {
 		if p.Timestamp.IsZero() {
-			return byte(61) //("=") messaging, no timestamp
+			return '='
 		}
-		return byte(64) //("@") messaging timestamp
+		return '@'
 	}
 	if p.Timestamp.IsZero() {
-		return byte(33) //("!") no messaging, no timestamp
+		return '!'
 	}
-	return byte(47) //("/") no messaging, timestamp
+	return '/'
 }
 
 // renderTimestamp returns the rendered timestamp from the position report
@@ -93,15 +91,14 @@ func (p *PositionReport) renderCoords() string {
 
 // renderFreq returns the rendered freqspec compatible Frequency
 func (p *PositionReport) renderFreq() string {
-	var out string
 	// add a delimiter if a data-extension exists
 	if len(p.Extn) >= 7 {
-		out = out + `/`
+		return "/" + p.Freq.Render()
 	}
-	return (out + p.Freq.Render())
+	return p.Freq.Render()
 }
 
-// renderAltitude returns the rendered freqspec compatible Frequency
+// renderAltitude returns the rendered altitude
 func (p *PositionReport) renderAltitude() string {
 	return fmt.Sprintf("/A=%06d", p.Altitude)
 }
@@ -129,7 +126,7 @@ func (p *PositionReport) CSExtension(course, speed, bearing, nrq int) {
 	}
 }
 
-// DSExtension Extension sets a wind direction/speed data-extension block
+// DSExtension sets a wind direction/speed data-extension block
 func (p *PositionReport) DSExtension(direction, speed int) {
 	p.Extn = fmt.Sprintf("%s/%s",
 		z3p(direction),
@@ -147,10 +144,10 @@ func (p *PositionReport) PHGExtension(power, gain, dir int, height byte) {
 	//| Directivity | omni | 45NE | 90E | 135SE | 180S | 225SW | 270W | 315NW | 360N |      | de    |
 	//+-------------+------+------+-----+-------+------+-------+------+-------+------+------+-------+
 	p.Extn = fmt.Sprintf("PHG%d%s%d%d",
-		max(9, power),
+		min(9, power),
 		string(height), // `The height code may in fact be any ASCII character 0–9 and above`
-		max(9, gain),
-		max(8, dir))
+		min(9, gain),
+		min(8, dir))
 }
 
 // RNGExtension sets a pre-computed range data-extension block
@@ -170,8 +167,8 @@ func (p *PositionReport) DFSExtension(str, gain, dir int, height byte) {
 	//+-------------+------+------+-----+-------+------+-------+------+-------+------+------+----------+
 	p.Symbol = `/\`
 	p.Extn = fmt.Sprintf("DFS%d%s%d%d",
-		max(9, str),
+		min(9, str),
 		string(height),
-		max(9, gain),
-		max(8, dir))
+		min(9, gain),
+		min(8, dir))
 }
