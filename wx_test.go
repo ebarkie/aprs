@@ -6,7 +6,10 @@ package aprs
 
 import (
 	"fmt"
+	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 var testWx = Wx{
@@ -123,4 +126,8 @@ func ExampleWx_String_wind() {
 	// Output:
 	// @052035z3542.00N/07842.00W_000/000g000t...r...p...P...h..b.....GoTst9-Stn
 	// @052035z3542.00N/07842.00W_180/008g016t...r...p...P...h..b.....GoTst9-Stn
+}
+
+func TestMillibars(t *testing.T) {
+	assert.Equal(t, 846.593815, pressure(25.0*inches).millibars(), "Inches to Millibars")
 }

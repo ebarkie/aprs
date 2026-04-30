@@ -7,8 +7,6 @@ package aprs
 import (
 	"fmt"
 	"time"
-
-	"github.com/ebarkie/weatherlink/units"
 )
 
 // Wx represents a weather station observation.
@@ -136,7 +134,7 @@ func (w Wx) String() (s string) {
 	if w.Altimeter <= 0.0 {
 		s += "b....."
 	} else {
-		s += fmt.Sprintf("b%05.0f", units.Pressure(w.Altimeter*units.Inches).Millibars()*10.0)
+		s += fmt.Sprintf("b%05.0f", pressure(w.Altimeter*inches).millibars()*10.0)
 	}
 
 	if w.SolarRad >= 1000 {
@@ -152,4 +150,19 @@ func (w Wx) String() (s string) {
 	}
 
 	return
+}
+
+const inches = 1.0
+
+// pressure is a barometric pressure stored in inches.
+type pressure float64
+
+// inches returns the pressure in inches.
+func (p pressure) inches() float64 {
+	return float64(p)
+}
+
+// millibars returns the pressure in millibars.
+func (p pressure) millibars() float64 {
+	return p.inches() * 33.8637526
 }
